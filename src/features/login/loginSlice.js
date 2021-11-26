@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import APIService from "../../config/Api";
+// import APIService from "../../config/Api";
+import axios from "../../config/axios"
+const axiosInstance = axios.initiate();
 
 const initialState = {
   isLoggedIn: false,
@@ -39,7 +41,7 @@ export const loginSelector = (state) => state.login;
 export const loginUser = (data) => async (dispatch) => {
   dispatch(loginRequest());
   try {
-    const response = await APIService.postData("/login", { ...data });
+    const response = await axiosInstance.post("/login", { username: data.email, password: data.password });
     dispatch(loginSuccess(response.data));
   } catch (error) {
     dispatch(loginFailure(error));
