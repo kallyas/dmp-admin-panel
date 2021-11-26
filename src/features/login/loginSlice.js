@@ -1,0 +1,49 @@
+import { createSlice } from "@reduxjs/toolkit";
+import APIService from "../../config/Api";
+
+const initialState = {
+  isLoggedIn: false,
+  loading: false,
+  user: {},
+  error: null,
+};
+
+export const loginSlice = createSlice({
+  name: "login",
+  initialState,
+  reducers: {
+    loginRequest: (state, action) => {
+      state.isLoggedIn = false;
+      state.loading = true;
+      state.error = null;
+    },
+    loginSuccess: (state, action) => {
+      state.isLoggedIn = true;
+      state.loading = false;
+      state.user = action.payload;
+      state.error = null;
+    },
+    loginFailure: (state, action) => {
+      state.isLoggedIn = false;
+      state.loading = false;
+      state.user = {};
+      state.error = action.payload;
+    },
+  },
+});
+
+export const { loginRequest, loginSuccess, loginFailure } = loginSlice.actions;
+
+export const loginSelector = (state) => state.login;
+
+export const loginUser = (data) => async (dispatch) => {
+  dispatch(loginRequest());
+  try {
+    const response = await APIService.postData("/login", { ...data });
+    dispatch(loginSuccess(response.data));
+  } catch (error) {
+    dispatch(loginFailure(error));
+  }
+};
+
+export default loginSlice.reducer;
