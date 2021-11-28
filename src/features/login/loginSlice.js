@@ -42,6 +42,7 @@ export const loginUser = (data) => async (dispatch) => {
   dispatch(loginRequest());
   try {
     const response = await axiosInstance.post("/login", { username: data.email, password: data.password });
+    //save token to local storage
     dispatch(loginSuccess(response.data));
   } catch (error) {
     dispatch(loginFailure(error));

@@ -1,9 +1,12 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import AuthShape from "../components/AuthShape";
-import { loginUser } from "../features/login/loginSlice";
+import { loginUser, loginSelector } from "../features/login/loginSlice";
 
 const Login = () => {
+  const { user, loading, error, isLoggedIn } = useSelector(loginSelector);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [data, setData] = useState({
     email: "",
@@ -20,7 +23,18 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUser(data));
+    if (user.access_token && loading === false) {
+      localStorage.setItem("access_token", user.access_token);
+      localStorage.setItem("refresh_token", user.refresh_token);
+      return navigate("/dashboard");
+    }
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [isLoggedIn]);
 
   return (
     <div className="wrapper">
@@ -31,8 +45,8 @@ const Login = () => {
           </div>
           <div className="card-body auth-padding">
             <a href="#" className="navbar-brand d-flex align-items-center mb-3"></a>
-            <h2 className="mb-2 text-center">Sign In</h2>
-            <p className="text-center">Login to stay connected.</p>
+            <h2 className="mb-2 text-center">DPM Admin </h2>
+            <p className="text-center">Login to continue.</p>
             <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-lg-12">
@@ -44,6 +58,7 @@ const Login = () => {
                       type="email"
                       className="form-control border-primary"
                       id="email"
+                      name="email"
                       aria-describedby="email"
                       value={data.email}
                       onChange={handleChange}
@@ -59,6 +74,7 @@ const Login = () => {
                       type="password"
                       className="form-control border-primary"
                       id="password"
+                      name="password"
                       aria-describedby="password"
                       value={data.password}
                       onChange={handleChange}
@@ -68,7 +84,7 @@ const Login = () => {
               </div>
               <div className="d-flex justify-content-center">
                 <button type="submit" className="btn btn-primary">
-                  Sign In
+                  {loading ? "Loading..." : "Login"}
                 </button>
               </div>
             </form>
@@ -79,6 +95,7 @@ const Login = () => {
             src="https://i.pinimg.com/originals/70/a6/6d/70a66ded2dd28914f5e25ad8ed822d86.png"
             class="img-fluid gradient-main vh-100"
             alt="images"
+            style={{ objectFit: "scale-down" }}
           />
         </div>
       </div>
