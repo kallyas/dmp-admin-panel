@@ -1,20 +1,22 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import Layout from '../components/Layout'
-import Sidebar from '../components/Sidebar'
+import React from "react";
+import Navbar from "../components/Navbar";
+import Layout from "../components/Layout";
+import Sidebar from "../components/Sidebar";
+import MainContainer from "../components/MainContainer";
+import Main from "../components/Main";
 
 const dashboard = () => {
-    return (
-        <>
-        <Sidebar />
-        <main className="main-content">
-            <Navbar />
-            <div className="conatiner-fluid content-inner mt-6 py-0">
-                
-            </div>
-        </main>
-        </>
-    )
-}
+  return (
+    <>
+      <Sidebar />
+      <main className="main-content">
+        <Navbar />
+        <MainContainer>
+          <Main />
+        </MainContainer>
+      </main>
+    </>
+  );
+};
 
-export default dashboard
+export default dashboard;

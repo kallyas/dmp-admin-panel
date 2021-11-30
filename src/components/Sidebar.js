@@ -85,12 +85,12 @@ const Sidebar = () => {
                 </a>
                 <ul className="sub-nav collapse" id="sidebar-user" data-bs-parent="#sidebar-menu">
                   <NavItem
-                    to="/vendor-profiles"
+                    to="/dashboard/vendor-profiles"
                     Icon={IconDot}
                     name="Vendor Profiles"
                     initial="V"
                   />
-                  <NavItem to="/vendor-profiles/add" Icon={IconDot} name="Add Vendor" initial="A" />
+                  <NavItem to="/dashboard/vendor-profiles/add" Icon={IconDot} name="Add Vendor" initial="A" />
                 </ul>
               </li>
             </ul>
