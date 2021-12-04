@@ -4,7 +4,9 @@ import IconEye from "./icons/IconEye";
 import IconVendor from "./icons/IconVendor";
 import IconTick from "./icons/IconTick";
 import IconArrowUp from "./icons/IconArrowUp";
+import IconArrowDown from "./icons/IconArrowDown";
 import SalesCard from "./SalesCard";
+import IconIncrease from "./icons/IconIncrease";
 
 const Main = () => {
   return (
@@ -28,11 +30,11 @@ const Main = () => {
         </div>
         <div className="card-body pt-0 iq-services">
           <div className="card-group border rounded-1">
-            <SalesCard />
+            <SalesCard color="success" Icon={IconIncrease} />
             <div className="verticle-line" />
-            <SalesCard />
+            <SalesCard color="danger" Icon={IconArrowDown}/>
             <div className="verticle-line" />
-            <SalesCard />
+            <SalesCard color="success" Icon={IconIncrease} />
             <div className="verticle-line" />
           </div>
         </div>

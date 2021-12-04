@@ -38,7 +38,7 @@ const Navbar = () => {
                        <a href="/dashboard" class="nav-link ">Home</a>
                     </li>
                     <li class="nav-item">
-                       <a href="/" class="nav-link ">Orders</a>
+                       <a href="/" class="nav-link ">Reports</a>
                     </li>
                     <li>
                     <ul class="m-0 d-flex align-items-center navbar-list list-unstyled px-3 px-md-0">
