@@ -1,6 +1,33 @@
-import React from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createVendor, vendorSelector } from "../features/vendor/vendorSlice";
 
 const VendorForm = () => {
+  const dispatch = useDispatch();
+  const  { data, loading, error } = useSelector(vendorSelector);
+  const [vendor, setVendor] = useState({
+    name: "",
+    email: "",
+    phone_number: "",
+    physical_address: "",
+    trade_name: "",
+    postal_address: "",
+    vendor_type_id: "",
+  });
+
+  const handleChange = (e) => {
+    setVendor((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(vendor);
+    dispatch(createVendor(vendor));
+  };
+
   return (
     <>
       <div className="col-xl-3 col-lg-4">
@@ -13,10 +40,18 @@ const VendorForm = () => {
           <div className="card-body">
             <form>
               <div className="form-group">
-                <label className="form-label">User Role:</label>
-                <select name="type" className="selectpicker form-control" data-style="py-0">
-                  <option>Select</option>
-                  <option>Vendor</option>
+                <label className="form-label">Vendor Type:</label>
+                <select
+                  name="vendor_type_id"
+                  className="selectpicker form-control"
+                  data-style="py-0"
+                  value={vendor.vendor_type_id}
+                  onChange={handleChange}
+                >
+                  <option>Select Vendor Type</option>
+                  <option value="1">Bus</option>
+                  <option value="2">Taxi</option>
+                  <option value="3">Bus & Taxi</option>
                 </select>
               </div>
             </form>
@@ -32,165 +67,96 @@ const VendorForm = () => {
           </div>
           <div className="card-body">
             <div className="new-user-info">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="row">
                   <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="fname">
-                      First Name:
+                    <label className="form-label" htmlFor="name">
+                      Name:
                     </label>
                     <input
                       type="text"
                       className="form-control"
-                      id="fname"
-                      placeholder="First Name"
+                      id="name"
+                      name="name"
+                      placeholder="Name"
+                      value={vendor.name}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="lname">
-                      Last Name:
+                    <label className="form-label" htmlFor="phone_number">
+                      Phone Number:
                     </label>
                     <input
                       type="text"
                       className="form-control"
-                      id="lname"
-                      placeholder="Last Name"
+                      name="phone_number"
+                      id="phone"
+                      placeholder="0712345678"
+                      value={vendor.phone_number}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="add1">
-                      Street Address 1:
+                    <label className="form-label" htmlFor="physical_address">
+                      Physical Address:
                     </label>
                     <input
                       type="text"
                       className="form-control"
-                      id="add1"
-                      placeholder="Street Address 1"
+                      name="physical_address"
+                      id="physicaladdress"
+                      placeholder="physicaladdress"
+                      value={vendor.physical_address}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="add2">
-                      Street Address 2:
+                    <label className="form-label" htmlFor="postal_address">
+                      Postal Address:
                     </label>
                     <input
+                      name="postal_address"
                       type="text"
                       className="form-control"
-                      id="add2"
-                      placeholder="Street Address 2"
+                      id="postaladdress"
+                      placeholder="P.O. Box XXXX Kampala"
+                      value={vendor.postal_address}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group col-md-12">
-                    <label className="form-label" htmlFor="cname">
+                    <label className="form-label" htmlFor="trade_name">
                       Company Name:
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       id="cname"
+                      name="trade_name"
                       placeholder="Company Name"
-                    />
-                  </div>
-                  <div className="form-group col-sm-12">
-                    <label className="form-label">Country:</label>
-                    <select name="type" className="selectpicker form-control" data-style="py-0">
-                      <option>Select Country</option>
-                      <option>Caneda</option>
-                      <option>Noida</option>
-                      <option>USA</option>
-                      <option>India</option>
-                      <option>Africa</option>
-                    </select>
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="mobno">
-                      Mobile Number:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="mobno"
-                      placeholder="Mobile Number"
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="altconno">
-                      Alternate Contact:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="altconno"
-                      placeholder="Alternate Contact"
+                      value={vendor.trade_name}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group col-md-6">
                     <label className="form-label" htmlFor="email">
                       Email:
                     </label>
-                    <input type="email" className="form-control" id="email" placeholder="Email" />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="pno">
-                      Pin Code:
-                    </label>
-                    <input type="text" className="form-control" id="pno" placeholder="Pin Code" />
-                  </div>
-                  <div className="form-group col-md-12">
-                    <label className="form-label" htmlFor="city">
-                      Town/City:
-                    </label>
-                    <input type="text" className="form-control" id="city" placeholder="Town/City" />
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      name="email"
+                      placeholder="johndoe@gmail.com"
+                      value={vendor.email}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
                 <hr />
-                <h5 className="mb-3">Security</h5>
-                <div className="row">
-                  <div className="form-group col-md-12">
-                    <label className="form-label" htmlFor="uname">
-                      User Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="uname"
-                      placeholder="User Name"
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="pass">
-                      Password:
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="pass"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="rpass">
-                      Repeat Password:
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="rpass"
-                      placeholder="Repeat Password "
-                    />
-                  </div>
-                </div>
-                <div className="checkbox">
-                  <label className="form-label">
-                    <input
-                      className="form-check-input me-2"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckChecked"
-                    />
-                    Enable Two-Factor-Authentication
-                  </label>
-                </div>
                 <button type="submit" className="btn btn-primary">
-                  Add New User
+                  Add New Vendor
                 </button>
               </form>
             </div>
