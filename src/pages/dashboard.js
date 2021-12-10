@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import Layout from "../components/Layout";
 import Sidebar from "../components/Sidebar";
 import MainContainer from "../components/MainContainer";
 import Main from "../components/Main";

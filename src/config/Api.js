@@ -10,7 +10,7 @@ class APIService {
     const refreshToken = this.refreshToken();
     if (
       error.response &&
-      (error.response.status === 401 || error.message == "Token has expires") &&
+      (error.response.status === 401 || error.message === "Token has expires") &&
       refreshToken
     ) {
       try {

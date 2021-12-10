@@ -1,5 +1,4 @@
 import React from "react";
-import IconIncrease from "./icons/IconIncrease";
 import IconPlus from "./icons/IconPlus";
 
 const SalesCard = ({ color, Icon }) => {
