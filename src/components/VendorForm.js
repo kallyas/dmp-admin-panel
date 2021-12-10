@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createVendor, vendorSelector } from "../features/vendor/vendorSlice";
@@ -24,7 +25,6 @@ const VendorForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(vendor);
     dispatch(createVendor(vendor));
   };
 

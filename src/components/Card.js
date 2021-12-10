@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 
 const Card = ({ number, Icon, text, info}) => {

@@ -3,13 +3,12 @@ import Api from "./axios";
 class APIService {
   axios = Api.initiate();
 
-  refreshToken = () => JSON.parse(JSON.parse(localStorage.getItem('persist:root'))?.login).user.refresh_token
-
+  refreshToken = () => localStorage.getItem("DPMRefreshToken");
   renewSession = async (error) => {
     const refreshToken = this.refreshToken();
     if (
       error.response &&
-      (error.response.status === 401 || error.message == "Token has expires") &&
+      (error.response.status === 401 || error.message === "Token has expires") &&
       refreshToken
     ) {
       try {
@@ -18,7 +17,7 @@ class APIService {
           {},
           { headers: { Authorization: `Bearer ${refreshToken}` } }
         );
-        localStorage.setItem("access_token", result.data.access_token);
+        localStorage.setItem("DPMAccessToken", result.data.access_token);
         Api.ACCESS_TOKEN = result.data.access_token;
         return result;
       } catch (error) {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import IconDashboard from "./icons/IconDashboard";
 import IconRightArrow from "./icons/IconRightArrow";
