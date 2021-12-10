@@ -4,7 +4,8 @@ import Sidebar from "../components/Sidebar";
 import MainContainer from "../components/MainContainer";
 import Main from "../components/Main";
 
-const dashboard = () => {
+const Dashboard = () => {
+
   return (
     <>
       <Sidebar />
@@ -18,4 +19,4 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;

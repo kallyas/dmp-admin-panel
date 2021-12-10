@@ -43,6 +43,8 @@ export const loginUser = (data) => async (dispatch) => {
   try {
     const response = await axiosInstance.post("/login", { username: data.email, password: data.password });
     //save token to local storage
+    localStorage.setItem("DPMAccessToken", response.data?.access_token);
+    localStorage.setItem("DPMRefreshToken", response.data?.refresh_token);
     dispatch(loginSuccess(response.data));
   } catch (error) {
     dispatch(loginFailure(error));

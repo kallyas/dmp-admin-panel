@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthShape from "../components/AuthShape";
 import { loginUser, loginSelector } from "../features/login/loginSlice";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  const { user, loading, error, isLoggedIn } = useSelector(loginSelector);
+  const { loading, error, isLoggedIn } = useSelector(loginSelector);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [data, setData] = useState({
@@ -24,10 +25,14 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUser(data));
-    if (user.access_token && loading === false) {
-      localStorage.setItem("access_token", user.access_token);
-      localStorage.setItem("refresh_token", user.refresh_token);
-      return navigate("/dashboard");
+
+    if (isLoggedIn) {
+      toast.success("Login Successful");
+      return navigate("/");
+    }
+
+    if (error) {
+      return toast.error(error);
     }
   };
 

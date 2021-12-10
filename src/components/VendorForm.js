@@ -25,7 +25,6 @@ const VendorForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(vendor);
     dispatch(createVendor(vendor));
   };
 

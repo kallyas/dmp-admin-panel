@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MainContainer from "../components/MainContainer";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import { useSelector, useDispatch } from "react-redux";
+import { vendorSelector, fetchVendors } from "../features/vendor/vendorSlice";
 
-const vendorProfiles = () => {
+const VendorProfiles = () => {
+  const dispatch = useDispatch();
+  const { vendors } = useSelector(vendorSelector);
+
+  console.log(vendors);
+
+  useEffect(() => {
+    dispatch(fetchVendors());
+  }, [dispatch]);
+
   return (
     <>
       <Sidebar />
@@ -99,4 +110,4 @@ const vendorProfiles = () => {
   );
 };
 
-export default vendorProfiles;
+export default VendorProfiles;

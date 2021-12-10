@@ -3,7 +3,7 @@ require("dotenv").config();
 
 class Api {
   static axiosInstance = axios;
-  static ACCESS_TOKEN = JSON.parse(JSON.parse(localStorage.getItem('persist:root'))?.login).user.access_token;
+  static ACCESS_TOKEN = localStorage.getItem("DPMAccessToken");
   static initiate() {
     this.axiosInstance.defaults.baseURL = process.env.REACT_APP_API_URL;
     this.axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${this.ACCESS_TOKEN}`;
