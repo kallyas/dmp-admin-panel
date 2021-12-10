@@ -4,7 +4,7 @@ import Api from "./axios";
 class APIService {
   axios = Api.initiate();
 
-  refreshToken = () => JSON.parse(JSON.parse(localStorage.getItem('persist:root')).login).user.refresh_token
+  refreshToken = () => JSON.parse(JSON.parse(localStorage.getItem('persist:root'))?.login).user.refresh_token
 
   renewSession = async (error) => {
     const refreshToken = this.refreshToken();
