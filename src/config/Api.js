@@ -1,5 +1,4 @@
 import Api from "./axios";
-
 // create an axios instance
 class APIService {
   axios = Api.initiate();
