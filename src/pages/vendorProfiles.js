@@ -86,14 +86,14 @@ const VendorProfiles = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {[1, 2, 3].map((_, i) => (
+                          {vendors.map((vendor, i) => (
                             <tr key={i}>
-                              <td>Bob</td>
-                              <td>0781234567</td>
-                              <td>bob@gmail.com</td>
-                              <td>Kampala</td>
-                              <td>P.O.BOX 123 Kampala</td>
-                              <td>Bob's Trading</td>
+                              <td>{vendor.name}</td>
+                              <td>{vendor.phone_number}</td>
+                              <td>{vendor.email}</td>
+                              <td>{vendor.physical_address}</td>
+                              <td>{vendor.postal_address}</td>
+                              <td>{vendor.trade_name}</td>
                             </tr>
                           ))}
                         </tbody>

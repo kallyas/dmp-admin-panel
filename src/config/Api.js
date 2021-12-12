@@ -7,11 +7,7 @@ class APIService {
   refreshToken = () => localStorage.getItem("DPMRefreshToken");
   renewSession = async (error) => {
     const refreshToken = this.refreshToken();
-    if (
-      error.response &&
-      (error.response.status === 401 || error.message === "Token has expires") &&
-      refreshToken
-    ) {
+    if (error && (error.status === 401 || error.message === "Token has expires") && refreshToken) {
       try {
         const result = await this.axios.post(
           "/token/refresh",
