@@ -1,10 +1,13 @@
 /* eslint-disable */
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { createVendor, vendorSelector } from "../features/vendor/vendorSlice";
 
 const VendorForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const  { data, loading, error } = useSelector(vendorSelector);
   const [vendor, setVendor] = useState({
     name: "",
@@ -26,6 +29,15 @@ const VendorForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createVendor(vendor));
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    if (data) {
+      toast.success("Vendor created successfully");
+      navigate("/dashboard/vendor-profiles")
+    }
   };
 
   return (
@@ -156,7 +168,7 @@ const VendorForm = () => {
                 </div>
                 <hr />
                 <button type="submit" className="btn btn-primary">
-                  Add New Vendor
+                  {loading ? "Loading..." : "Add New Vendor"}
                 </button>
               </form>
             </div>

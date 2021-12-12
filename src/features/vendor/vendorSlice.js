@@ -39,8 +39,14 @@ const vendorSlice = createSlice({
   },
 });
 
-export const { createVendorRequest, createVendorSuccess, createVendorFailure, getVendorFailure, getVendorRequest, getVendorSuccess } =
-  vendorSlice.actions;
+export const {
+  createVendorRequest,
+  createVendorSuccess,
+  createVendorFailure,
+  getVendorFailure,
+  getVendorRequest,
+  getVendorSuccess,
+} = vendorSlice.actions;
 
 export const vendorSelector = (state) => state.vendor;
 
