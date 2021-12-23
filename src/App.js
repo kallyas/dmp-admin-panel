@@ -15,8 +15,8 @@ function App() {
         <Route exact path="/" element={<Login />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/vendor-profiles/add" element={<AddVendor />} />
-          <Route path="/dashboard/vendor-profiles" element={<VendorProfiles />} />
+          <Route path="/dashboard/vendors/add" element={<AddVendor />} />
+          <Route path="/dashboard/vendors" element={<VendorProfiles />} />
         </Route>
       </Routes>
    </Router>
