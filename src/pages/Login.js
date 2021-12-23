@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import AuthShape from "../components/AuthShape";
+import { IconEye } from '@tabler/icons';
 import { loginUser, loginSelector } from "../features/login/loginSlice";
 import { toast } from "react-toastify";
 
@@ -43,66 +43,60 @@ const Login = () => {
   }, [isLoggedIn]);
 
   return (
-    <div className="wrapper">
-      <div className="res-hide row m-0 align-items-center vh-100">
-        <div className="col-lg-5 pb-0">
-          <div className="auth-shap position-relative">
-            <AuthShape />
+    <div className="border-top-wide border-primary d-flex flex-column">
+      <div className="page page-center">
+        <div className="container-tight py-4">
+          <div className="text-center mb-4">
+            <a href="." className="navbar-brand navbar-brand-autodark">
+              <img src="https://dpm-vendor-ui-nzs4n.ondigitalocean.app/static/media/dpm_logo.0a9f7327.png" height="36" alt="" />
+            </a>
           </div>
-          <div className="card-body auth-padding">
-            <a href="#" className="navbar-brand d-flex align-items-center mb-3"></a>
-            <h2 className="mb-2 text-center">DPM Admin </h2>
-            <p className="text-center">Login to continue.</p>
-            <form onSubmit={handleSubmit}>
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="form-group">
-                    <label for="email" className="form-label">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control border-primary"
-                      id="email"
-                      name="email"
-                      aria-describedby="email"
-                      value={data.email}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="col-lg-12">
-                  <div className="form-group">
-                    <label for="password" className="form-label">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control border-primary"
-                      id="password"
-                      name="password"
-                      aria-describedby="password"
-                      value={data.password}
-                      onChange={handleChange}
-                    />
-                  </div>
+          <form className="card card-md" autocomplete="on" onSubmit={handleSubmit}>
+            <div className="card-body">
+              <h2 className="card-title text-center mb-4">Login to your account</h2>
+              <div className="mb-3">
+                <label className="form-label">Email address</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Enter email"
+                  name="email"
+                  value={data.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="mb-2">
+                <label className="form-label">Password</label>
+                <div className="input-group input-group-flat">
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Password"
+                    autocomplete="on"
+                    name="password"
+                    value={data.password}
+                    onChange={handleChange}
+                  />
+                  <span className="input-group-text">
+                    <a href="#" className="link-secondary" title="Show password" data-bs-toggle="tooltip">
+                      <IconEye />
+                    </a>
+                  </span>
                 </div>
               </div>
-              <div className="d-flex justify-content-center">
-                <button type="submit" className="btn btn-primary">
+              <div className="mb-2">
+                <label className="form-check">
+                  <input type="checkbox" className="form-check-input" />
+                  <span className="form-check-label">Remember me on this device</span>
+                </label>
+              </div>
+              <div className="form-footer">
+                <button type="submit" className="btn btn-primary w-100">
                   {loading ? "Loading..." : "Login"}
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-        <div class="col-lg-7 d-md-block d-none p-0">
-          <img
-            src="https://i.pinimg.com/originals/70/a6/6d/70a66ded2dd28914f5e25ad8ed822d86.png"
-            class="img-fluid gradient-main vh-100"
-            alt="images"
-            style={{ objectFit: "scale-down" }}
-          />
+            </div>
+          </form>
         </div>
       </div>
     </div>
