@@ -6,12 +6,9 @@ import { fetchTrips, tripsSelector } from "../../features/trips/tripsSlice";
 
 const Trips = () => {
   const dispatch = useDispatch();
-  const {trips, loading, error} = useSelector(tripsSelector);
+  const { trips, loading, error } = useSelector(tripsSelector);
   console.log(trips);
 
-    useEffect(() => {
-        dispatch(fetchTrips());
-    }, [dispatch]);
   const options = {
     chart: {
       id: "trips",
@@ -39,6 +36,11 @@ const Trips = () => {
       data: [30, 40, 45, 50, 49, 60, 70, 91, 125, 90, 110, 100],
     },
   ];
+
+  useEffect(() => {
+    dispatch(fetchTrips());
+  }, [dispatch]);
+
   return (
     <>
       <Chart options={options} series={series} type="bar" height="240" />

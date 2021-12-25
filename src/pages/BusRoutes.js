@@ -1,3 +1,4 @@
+/* elsint-disable */
 import { useEffect } from "react";
 import { IconChevronLeft, IconChevronRight, IconChevronUp } from "@tabler/icons";
 import Layout from "../components/Layout";
