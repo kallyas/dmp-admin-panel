@@ -17,4 +17,5 @@ const Logout = () => {
   return <div>Logging out and Redirecting to login...</div>;
 };
 
+
 export default Logout;
