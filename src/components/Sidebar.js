@@ -1,6 +1,14 @@
 /* eslint-disable */
 import React from "react";
-import { IconBell, IconHome, IconLogout, IconMoon, IconPackage, IconRoute, IconSun } from "@tabler/icons";
+import {
+  IconBell,
+  IconHome,
+  IconLogout,
+  IconMoon,
+  IconPackage,
+  IconRoute,
+  IconSun,
+} from "@tabler/icons";
 
 const Sidebar = () => {
   return (
@@ -103,14 +111,34 @@ const Sidebar = () => {
                 <span className="nav-link-title"> Home </span>
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/dashboard/vendors">
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#navbar-base"
+                data-bs-auto-close="false"
+                role="button"
+                aria-expanded="false"
+                data-bs-toggle="dropdown"
+              >
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
                   <IconPackage />
                 </span>
-                <span className="nav-link-title"> Vendors </span>
+                <span className="nav-link-title">Vendors</span>
               </a>
+              <div className="dropdown-menu">
+                <div className="dropdown-menu-columns">
+                  <div className="dropdown-menu-column">
+                    <a className="dropdown-item" href="/dashboard/vendors">
+                      Vendors List
+                    </a>
+                    <a className="dropdown-item" href="/dashboard/vendors/add">
+                      Add Vendor
+                    </a>
+                  </div>
+                </div>
+              </div>
             </li>
+
             <li className="nav-item">
               <a className="nav-link" href="/dashboard/routes">
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
