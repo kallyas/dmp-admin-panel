@@ -8,6 +8,7 @@ import {
   IconPackage,
   IconRoute,
   IconSun,
+  IconUsers,
 } from "@tabler/icons";
 
 const Sidebar = () => {
@@ -95,7 +96,7 @@ const Sidebar = () => {
               <a href="#" className="dropdown-item">
                 Settings
               </a>
-              <a href="#" className="dropdown-item">
+              <a href="/logout" className="dropdown-item">
                 Logout
               </a>
             </div>
@@ -146,6 +147,33 @@ const Sidebar = () => {
                 </span>
                 <span className="nav-link-title">Bus Routes </span>
               </a>
+            </li>
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#navbar-base"
+                data-bs-auto-close="false"
+                role="button"
+                aria-expanded="false"
+                data-bs-toggle="dropdown"
+              >
+                <span className="nav-link-icon d-md-none d-lg-inline-block">
+                  <IconUsers />
+                </span>
+                <span className="nav-link-title">Staff</span>
+              </a>
+              <div className="dropdown-menu">
+                <div className="dropdown-menu-columns">
+                  <div className="dropdown-menu-column">
+                    <a className="dropdown-item" href="/dashboard/staff">
+                      Staff List
+                    </a>
+                    <a className="dropdown-item" href="/dashboard/staff/add">
+                      Add New Staff
+                    </a>
+                  </div>
+                </div>
+              </div>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/logout">
