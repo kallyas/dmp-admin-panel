@@ -36,7 +36,7 @@ const VendorForm = () => {
 
     if (data) {
       toast.success("Vendor created successfully");
-      navigate("/dashboard/vendor-profiles")
+      navigate("/dashboard/vendors")
     }
   };
 
@@ -59,6 +59,7 @@ const VendorForm = () => {
                   data-style="py-0"
                   value={vendor.vendor_type_id}
                   onChange={handleChange}
+                  required
                 >
                   <option>Select Vendor Type</option>
                   <option value="1">Bus</option>
@@ -70,7 +71,7 @@ const VendorForm = () => {
           </div>
         </div>
       </div>
-      <div className="col-xl-9 col-lg-8">
+      <div className="col-xl-8 col-lg-7">
         <div className="card">
           <div className="card-header d-flex justify-content-between">
             <div className="header-title">
@@ -93,6 +94,7 @@ const VendorForm = () => {
                       placeholder="Name"
                       value={vendor.name}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group col-md-6">
@@ -107,6 +109,7 @@ const VendorForm = () => {
                       placeholder="0712345678"
                       value={vendor.phone_number}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group col-md-6">
@@ -121,6 +124,7 @@ const VendorForm = () => {
                       placeholder="physicaladdress"
                       value={vendor.physical_address}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group col-md-6">
@@ -135,20 +139,22 @@ const VendorForm = () => {
                       placeholder="P.O. Box XXXX Kampala"
                       value={vendor.postal_address}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group col-md-12">
                     <label className="form-label" htmlFor="trade_name">
-                      Company Name:
+                      Trade Name:
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       id="cname"
                       name="trade_name"
-                      placeholder="Company Name"
+                      placeholder="Link Bus Limited"
                       value={vendor.trade_name}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group col-md-6">
@@ -163,6 +169,7 @@ const VendorForm = () => {
                       placeholder="johndoe@gmail.com"
                       value={vendor.email}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                 </div>

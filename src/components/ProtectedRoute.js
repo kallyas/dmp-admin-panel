@@ -10,15 +10,15 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
   const { isLoggedIn } = useSelector(loginSelector);
 
   const isExpired = () => {
-    if (isLoggedIn) {
+    if (isLoggedIn && localStorage.getItem("DPMAccessToken")) {
       const token = localStorage.getItem("DPMAccessToken");
-      const decoded = jwt_decode(token);
+      const decoded = token? jwt_decode(token): null;
       const currentTime = Date.now() / 1000;
       const error = {
         status: 401,
         message: "Token has expired",
       };
-      if (decoded.exp < currentTime) {
+      if (token != null && decoded.exp < currentTime) {
         APIService.renewSession(error);
       }
     }
@@ -26,16 +26,14 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
 
   // check if token is expired and renew it
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (isLoggedIn == false && localStorage.getItem("DPMAccessToken") === null) {
       return <Navigate to="/" />;
     }
     isExpired();
   }, [isLoggedIn]);
 
   return (
-    <Outlet {...rest}>
-      <Element />
-    </Outlet>
+    <Outlet {...rest} />
   );
 };
 

@@ -1,101 +1,189 @@
 /* eslint-disable */
 import React from "react";
-import IconDashboard from "./icons/IconDashboard";
-import IconRightArrow from "./icons/IconRightArrow";
-import IconToggle from "./icons/IconToggle";
-import IconDot from "./icons/IconDot";
-import IconUserGroup from "./icons/IconUserGroup";
-import NavItem from "./NavItem";
+import {
+  IconBell,
+  IconHome,
+  IconLogout,
+  IconMoon,
+  IconPackage,
+  IconRoute,
+  IconSun,
+  IconUsers,
+} from "@tabler/icons";
 
 const Sidebar = () => {
   return (
-    <aside className="sidebar sidebar-default navs-rounded-all ">
-      <div className="sidebar-header d-flex align-items-center justify-content-center">
-        <a href="/dashboard" className="navbar-brand">
-          DPM Dashboard
-        </a>
-        <div className="sidebar-toggle d-xl-none" data-toggle="sidebar" data-active="true">
-          <i className="icon">
-            <IconToggle />
-          </i>
-        </div>
-      </div>
-      <div
-        className="sidebar-body pt-0 data-scrollbar"
-        dataScrollbar="true"
-        tabIndex="-1"
-        style={{ overflow: "hidden", outline: "none" }}
-      >
-        <div className="scroll-content">
-          <div className="sidebar-list">
-            <ul className="navbar-nav iq-main-menu" id="sidebar-menu">
-              <li class="nav-item static-item">
-                <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                  <span class="default-icon">Home</span>
-                  <span class="mini-icon">-</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a
-                  className="nav-link collapsed"
-                  data-bs-toggle="collapse"
-                  href="#home"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="home"
-                >
-                  <i className="icon">
-                    <IconDashboard />
-                  </i>
-                  <span className="item-name">Dashboard</span>
-                  <i className="right-icon">
-                    <IconRightArrow />
-                  </i>
-                </a>
-                <ul className="sub-nav collapse" id="home" data-bs-parent="#sidebar">
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="/dashboard">
-                      <i className="icon">
-                        <IconDot />
-                      </i>
-                      <i class="sidenav-mini-icon"> U</i>
-                      <span className="item-name">Admin</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <hr className="hr-horizontal" />
-              </li>
-              <li class="nav-item">
-                <a
-                  className="nav-link collapsed"
-                  data-bs-toggle="collapse"
-                  href="#sidebar-user"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="sidebar-user"
-                >
-                  <i className="icon">
-                    <IconUserGroup />
-                  </i>
-                  <span className="item-name">Vendors</span>
-                  <i className="right-icon">
-                    <IconRightArrow />
-                  </i>
-                </a>
-                <ul className="sub-nav collapse" id="sidebar-user" data-bs-parent="#sidebar-menu">
-                  <NavItem
-                    to="/dashboard/vendor-profiles"
-                    Icon={IconDot}
-                    name="Vendor Profiles"
-                    initial="V"
-                  />
-                  <NavItem to="/dashboard/vendor-profiles/add" Icon={IconDot} name="Add Vendor" initial="A" />
-                </ul>
-              </li>
-            </ul>
+    <aside className="navbar navbar-vertical navbar-expand-lg navbar-dark">
+      <div className="container-fluid">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar-menu"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <h1 className="navbar-brand navbar-brand-autodark">
+          <a href="/dashboard">
+            <img
+              src="https://dpm-vendor-ui-nzs4n.ondigitalocean.app/static/media/dpm_logo.0a9f7327.png"
+              width="110"
+              height="32"
+              alt="Tabler"
+              className="navbar-brand-image"
+            />
+          </a>
+        </h1>
+        <div className="navbar-nav flex-row d-lg-none">
+          <a
+            href="?theme=dark"
+            className="nav-link px-0 hide-theme-dark"
+            title=""
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            data-bs-original-title="Enable dark mode"
+          >
+            <IconMoon />
+          </a>
+          <a
+            href="?theme=light"
+            className="nav-link px-0 hide-theme-light"
+            title=""
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            data-bs-original-title="Enable light mode"
+          >
+            <IconSun />
+          </a>
+          <div className="nav-item dropdown d-none d-md-flex me-3">
+            <a
+              href="#"
+              className="nav-link px-0"
+              data-bs-toggle="dropdown"
+              tabIndex="-1"
+              aria-label="Show notifications"
+            >
+              <IconBell />
+              <span className="badge bg-red"></span>
+            </a>
+            <div className="dropdown-menu dropdown-menu-end dropdown-menu-card">
+              <div className="card">
+                <div className="card-body">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad amet
+                  consectetur exercitationem fugiat in ipsa ipsum, natus odio quidem quod
+                  repudiandae sapiente. Amet debitis et magni maxime necessitatibus ullam.
+                </div>
+              </div>
+            </div>
           </div>
+          <div className="nav-item dropdown">
+            <a
+              href="#"
+              className="nav-link d-flex lh-1 text-reset p-0"
+              data-bs-toggle="dropdown"
+              aria-label="Open user menu"
+            >
+              <span
+                className="avatar avatar-sm"
+                style={{ backgroundImage: "url(./static/avatars/000m.jpg)" }}
+              ></span>
+              <div className="d-none d-xl-block ps-2">
+                <div>Paweł Kuna</div>
+                <div className="mt-1 small text-muted">UI Designer</div>
+              </div>
+            </a>
+            <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+              <a href="#" className="dropdown-item">
+                Settings
+              </a>
+              <a href="/logout" className="dropdown-item">
+                Logout
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="collapse navbar-collapse" id="navbar-menu">
+          <ul className="navbar-nav pt-lg-3">
+            <li className="nav-item">
+              <a className="nav-link" href="/dashboard">
+                <span className="nav-link-icon d-md-none d-lg-inline-block">
+                  <IconHome />
+                </span>
+                <span className="nav-link-title"> Home </span>
+              </a>
+            </li>
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#navbar-base"
+                data-bs-auto-close="false"
+                role="button"
+                aria-expanded="false"
+                data-bs-toggle="dropdown"
+              >
+                <span className="nav-link-icon d-md-none d-lg-inline-block">
+                  <IconPackage />
+                </span>
+                <span className="nav-link-title">Vendors</span>
+              </a>
+              <div className="dropdown-menu">
+                <div className="dropdown-menu-columns">
+                  <div className="dropdown-menu-column">
+                    <a className="dropdown-item" href="/dashboard/vendors">
+                      Vendors List
+                    </a>
+                    <a className="dropdown-item" href="/dashboard/vendors/add">
+                      Add Vendor
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li className="nav-item">
+              <a className="nav-link" href="/dashboard/routes">
+                <span className="nav-link-icon d-md-none d-lg-inline-block">
+                  <IconRoute />
+                </span>
+                <span className="nav-link-title">Bus Routes </span>
+              </a>
+            </li>
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#navbar-base"
+                data-bs-auto-close="false"
+                role="button"
+                aria-expanded="false"
+                data-bs-toggle="dropdown"
+              >
+                <span className="nav-link-icon d-md-none d-lg-inline-block">
+                  <IconUsers />
+                </span>
+                <span className="nav-link-title">Staff</span>
+              </a>
+              <div className="dropdown-menu">
+                <div className="dropdown-menu-columns">
+                  <div className="dropdown-menu-column">
+                    <a className="dropdown-item" href="/dashboard/staff">
+                      Staff List
+                    </a>
+                    <a className="dropdown-item" href="/dashboard/staff/add">
+                      Add New Staff
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/logout">
+                <span className="nav-link-icon d-md-none d-lg-inline-block">
+                  <IconLogout />
+                </span>
+                <span className="nav-link-title"> Logout </span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </aside>

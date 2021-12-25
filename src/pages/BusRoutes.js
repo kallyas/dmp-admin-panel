@@ -1,18 +1,17 @@
-/* eslint-disable */
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { vendorSelector, fetchVendors } from "../features/vendor/vendorSlice";
-import Layout from "../components/Layout";
+/* elsint-disable */
+import { useEffect } from "react";
 import { IconChevronLeft, IconChevronRight, IconChevronUp } from "@tabler/icons";
+import Layout from "../components/Layout";
+import { useDispatch, useSelector } from "react-redux";
+import { getRoutes, routesSelector } from "../features/routes/routesSlice";
 
-const VendorProfiles = () => {
+const BusRoutes = () => {
+  const { data, isLoading, error } = useSelector(routesSelector);
   const dispatch = useDispatch();
-  const { vendors } = useSelector(vendorSelector);
 
-  console.log(vendors);
-
+  console.log(data.length);
   useEffect(() => {
-    dispatch(fetchVendors());
+    dispatch(getRoutes());
   }, [dispatch]);
 
   return (
@@ -21,8 +20,9 @@ const VendorProfiles = () => {
         <div className="col-12">
           <div className="card">
             <div className="card-header">
-              <h3 className="card-title">Vendor Profiles</h3>
+              <h3 className="card-title">Bus Routes</h3>
             </div>
+
             <div className="card-body border-bottom py-3">
               <div className="d-flex">
                 <div className="text-muted">
@@ -33,7 +33,7 @@ const VendorProfiles = () => {
                       className="form-control form-control-sm"
                       value="8"
                       size="3"
-                      aria-label="Vendor profiles count"
+                      aria-label="Bus Routes count"
                     />
                   </div>
                   entries
@@ -44,7 +44,7 @@ const VendorProfiles = () => {
                     <input
                       type="text"
                       className="form-control form-control-sm"
-                      aria-label="Search vendors"
+                      aria-label="Search Bus Routes"
                     />
                   </div>
                 </div>
@@ -65,51 +65,25 @@ const VendorProfiles = () => {
                       <IconChevronUp />
                       ID
                     </th>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Trade Name</th>
-                    <th>Postal Address</th>
-                    <th>Physical Address</th>
-                    <th>Email</th>
-                    <th></th>
+                    <th>Route Name</th>
+                    <th>Start Point</th>
+                    <th>Destination</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {vendors.map((vendor) => (
-                    <tr key={vendor.id}>
+                  {data.map((route) => (
+                    <tr key={route.id}>
                       <td>
                         <input
                           className="form-check-input m-0 align-middle"
                           type="checkbox"
-                          aria-label="Select Vendor"
+                          aria-label="Select Route"
                         />
                       </td>
-                      <td>{vendor.id}</td>
-                      <td>{vendor.name}</td>
-                      <td>{vendor.phone_number}</td>
-                      <td>{vendor.trade_name}</td>
-                      <td>{vendor.postal_address}</td>
-                      <td>{vendor.physical_address}</td>
-                      <td>{vendor.email}</td>
-                      <td className="text-end">
-                        <span className="dropdown">
-                          <button
-                            className="btn dropdown-toggle align-text-top"
-                            data-bs-boundary="viewport"
-                            data-bs-toggle="dropdown"
-                          >
-                            Actions
-                          </button>
-                          <div className="dropdown-menu dropdown-menu-end">
-                            <a className="dropdown-item" href="#">
-                              Action
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              Another action
-                            </a>
-                          </div>
-                        </span>
-                      </td>
+                      <td>{route.id}</td>
+                      <td>{route.route_code}</td>
+                      <td>{route.start_point}</td>
+                      <td>{route.destination}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -166,4 +140,4 @@ const VendorProfiles = () => {
   );
 };
 
-export default VendorProfiles;
+export default BusRoutes;
