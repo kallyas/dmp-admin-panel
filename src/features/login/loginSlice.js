@@ -51,4 +51,11 @@ export const loginUser = (data) => async (dispatch) => {
   }
 };
 
+export const logoutUser = () => async (dispatch) => {
+  //remove token from local storage
+  localStorage.removeItem("DPMAccessToken");
+  localStorage.removeItem("DPMRefreshToken");
+  dispatch(loginFailure());
+}
+
 export default loginSlice.reducer;

@@ -51,7 +51,7 @@ const Login = () => {
               <img src="https://dpm-vendor-ui-nzs4n.ondigitalocean.app/static/media/dpm_logo.0a9f7327.png" height="36" alt="" />
             </a>
           </div>
-          <form className="card card-md" autocomplete="on" onSubmit={handleSubmit}>
+          <form className="card card-md" autoComplete="on" onSubmit={handleSubmit}>
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Login to your account</h2>
               <div className="mb-3">
@@ -72,7 +72,7 @@ const Login = () => {
                     type="password"
                     className="form-control"
                     placeholder="Password"
-                    autocomplete="on"
+                    autoComplete="on"
                     name="password"
                     value={data.password}
                     onChange={handleChange}

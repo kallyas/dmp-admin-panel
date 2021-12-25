@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import AddVendor from './pages/addVendor';
 import VendorProfiles from './pages/vendorProfiles';
+import Logout from './pages/Logout';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/vendors/add" element={<AddVendor />} />
           <Route path="/dashboard/vendors" element={<VendorProfiles />} />
+          <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>
    </Router>

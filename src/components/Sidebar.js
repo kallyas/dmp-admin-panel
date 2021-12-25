@@ -51,7 +51,7 @@ const Sidebar = () => {
               href="#"
               className="nav-link px-0"
               data-bs-toggle="dropdown"
-              tabindex="-1"
+              tabIndex="-1"
               aria-label="Show notifications"
             >
               <IconBell />

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { vendorSelector, fetchVendors } from "../features/vendor/vendorSlice";
@@ -120,7 +121,7 @@ const VendorProfiles = () => {
               </p>
               <ul className="pagination m-0 ms-auto">
                 <li className="page-item disabled">
-                  <a className="page-link" href="#" tabindex="-1" aria-disabled="true">
+                  <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">
                     <IconChevronLeft />
                     prev
                   </a>
