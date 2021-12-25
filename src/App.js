@@ -7,6 +7,7 @@ import AddVendor from './pages/addVendor';
 import VendorProfiles from './pages/vendorProfiles';
 import Logout from './pages/Logout';
 import { ToastContainer } from 'react-toastify';
+import BusRoutes from './pages/BusRoutes';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/vendors/add" element={<AddVendor />} />
           <Route path="/dashboard/vendors" element={<VendorProfiles />} />
+          <Route path="/dashboard/routes" element={<BusRoutes />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>

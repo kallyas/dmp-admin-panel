@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from "react";
-import { IconBell, IconHome, IconLogout, IconMoon, IconPackage, IconSun } from "@tabler/icons";
+import { IconBell, IconHome, IconLogout, IconMoon, IconPackage, IconRoute, IconSun } from "@tabler/icons";
 
 const Sidebar = () => {
   return (
@@ -109,6 +109,14 @@ const Sidebar = () => {
                   <IconPackage />
                 </span>
                 <span className="nav-link-title"> Vendors </span>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/dashboard/routes">
+                <span className="nav-link-icon d-md-none d-lg-inline-block">
+                  <IconRoute />
+                </span>
+                <span className="nav-link-title">Bus Routes </span>
               </a>
             </li>
             <li className="nav-item">
