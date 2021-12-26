@@ -1,19 +1,31 @@
 /* eslint-disable */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { vendorSelector, fetchVendors } from "../features/vendor/vendorSlice";
 import Layout from "../components/Layout";
-import { IconChevronLeft, IconChevronRight, IconChevronUp } from "@tabler/icons";
+import { IconChevronUp } from "@tabler/icons";
+import Pagination from "../components/pagination";
 
 const VendorProfiles = () => {
   const dispatch = useDispatch();
   const { vendors } = useSelector(vendorSelector);
 
-  console.log(vendors);
+  const [dataPerPage, setDataPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleDataPerPage = (e) => {
+    e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
+  };
 
   useEffect(() => {
     dispatch(fetchVendors());
   }, [dispatch]);
+
+  const indexOfLastData = currentPage * dataPerPage;
+  const indexOfFirstData = indexOfLastData - dataPerPage;
+  const currentData = vendors.slice(indexOfFirstData, indexOfLastData);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <Layout>
@@ -29,11 +41,13 @@ const VendorProfiles = () => {
                   show
                   <div className="mx-2 d-inline-block">
                     <input
+                      style={{ width: "50px" }}
                       type="text"
                       className="form-control form-control-sm"
-                      value="8"
-                      size="3"
+                      value={dataPerPage}
+                      size="2"
                       aria-label="Vendor profiles count"
+                      onChange={handleDataPerPage}
                     />
                   </div>
                   entries
@@ -75,7 +89,7 @@ const VendorProfiles = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {vendors.map((vendor) => (
+                  {currentData.map((vendor) => (
                     <tr key={vendor.id}>
                       <td>
                         <input
@@ -119,45 +133,12 @@ const VendorProfiles = () => {
               <p className="m-0 text-muted">
                 Showing <span>1</span> to <span>8</span> of <span>16</span> entries
               </p>
-              <ul className="pagination m-0 ms-auto">
-                <li className="page-item disabled">
-                  <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">
-                    <IconChevronLeft />
-                    prev
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
-                </li>
-                <li className="page-item active">
-                  <a className="page-link" href="#">
-                    2
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    3
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    4
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    5
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    next
-                    <IconChevronRight />
-                  </a>
-                </li>
-              </ul>
+              <Pagination
+                dataPerPage={dataPerPage}
+                totalData={vendors.length}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
             </div>
           </div>
         </div>
