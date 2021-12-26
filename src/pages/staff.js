@@ -1,19 +1,30 @@
 /* eslint-disable */
-import { useEffect } from "react";
-import { IconChevronLeft, IconChevronRight, IconChevronUp } from "@tabler/icons";
+import { useEffect, useState } from "react";
+import { IconChevronUp } from "@tabler/icons";
 import Layout from "../components/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { getStaff, staffSelector } from "../features/staff/staffSlice";
+import Pagination from "../components/pagination";
 
 const Staff = () => {
   const { data, isLoading, error } = useSelector(staffSelector);
   const dispatch = useDispatch();
+  const [dataPerPage, setDataPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  console.log(data);
+  const handleDataPerPage = (e) => {
+    e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
+  };
 
   useEffect(() => {
     dispatch(getStaff());
   }, [dispatch]);
+
+  const indexOfLastData = currentPage * dataPerPage;
+  const indexOfFirstData = indexOfLastData - dataPerPage;
+  const currentData = data.slice(indexOfFirstData, indexOfLastData);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <Layout>
@@ -30,10 +41,12 @@ const Staff = () => {
                     show
                     <div className="mx-2 d-inline-block">
                       <input
-                        type="text"
+                        style={{ width: "50px" }}
+                        type="number"
                         className="form-control form-control-sm"
-                        value="8"
-                        size="3"
+                        value={dataPerPage}
+                        onChange={handleDataPerPage}
+                        size="2"
                         aria-label="Admin staff count"
                       />
                     </div>
@@ -73,7 +86,7 @@ const Staff = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((staff) => (
+                    {currentData.map((staff) => (
                       <tr key={staff.id}>
                         <td>
                           <input className="form-check-input m-0 align-middle" type="checkbox" />
@@ -90,47 +103,14 @@ const Staff = () => {
               </div>
               <div className="card-footer d-flex align-items-center">
                 <p className="m-0 text-muted">
-                  Showing <span>1</span> to <span>8</span> of <span>16</span> entries
+                  Showing <span>1</span> to <span>8</span> of <span>{data.length}</span> entries
                 </p>
-                <ul className="pagination m-0 ms-auto">
-                  <li className="page-item disabled">
-                    <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">
-                      <IconChevronLeft />
-                      prev
-                    </a>
-                  </li>
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      1
-                    </a>
-                  </li>
-                  <li className="page-item active">
-                    <a className="page-link" href="#">
-                      2
-                    </a>
-                  </li>
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      3
-                    </a>
-                  </li>
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      4
-                    </a>
-                  </li>
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      5
-                    </a>
-                  </li>
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      next
-                      <IconChevronRight />
-                    </a>
-                  </li>
-                </ul>
+                <Pagination
+                  dataPerPage={dataPerPage}
+                  totalData={data.length}
+                  paginate={paginate}
+                  currentPage={currentPage}
+                />
               </div>
             </div>
           </div>
