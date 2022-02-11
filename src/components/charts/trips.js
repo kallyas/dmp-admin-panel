@@ -7,7 +7,6 @@ import { fetchTrips, tripsSelector } from "../../features/trips/tripsSlice";
 const Trips = () => {
   const dispatch = useDispatch();
   const { trips, loading, error } = useSelector(tripsSelector);
-  console.log(trips);
 
   const options = {
     chart: {
