@@ -9,10 +9,7 @@ const Login = () => {
   const { loading, error, isLoggedIn } = useSelector(loginSelector);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [formError, setFormError] = useState({
-    email: "",
-    password: "",
-  });
+  const [formError, setFormError] = useState(null);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -25,30 +22,29 @@ const Login = () => {
     }));
   };
 
+  const verifyForm = () => {
+    let invalid = {};
+    if (!data.email) {
+      invalid.email = "Email is required";
+    }
+    if (!data.password) {
+      invalid.password = "Password is required";
+    }
+    setFormError(invalid);
+    return Object.keys(invalid).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (data.email === "") {
-      return setFormError((prevState) => ({
-        ...prevState,
-        email: "Email is required",
-      }));
-    } else if (data.password === "") {
-      return setFormError((prevState) => ({
-        ...prevState,
-        password: "Password is required",
-      }));
-    }
-
-    dispatch(loginUser(data));
-
-    if (isLoggedIn) {
-      toast.success("Login Successful");
-      return navigate("/");
-    }
-
-    if (error) {
-      return toast.error(error);
+    if (verifyForm()) {
+      dispatch(loginUser(data)).then(() => {
+        if (error) {
+          return toast.error(error.message);
+        } else {
+          toast.success("Login Successful");
+          navigate("/");
+        }
+      });
     }
   };
 
@@ -84,7 +80,7 @@ const Login = () => {
                   value={data.email}
                   onChange={handleChange}
                 />
-                {formError.email && <p className="text-danger">{formError.email}</p>}
+                {formError != null && <p className="text-danger">{formError.email}</p>}
               </div>
               <div className="mb-2">
                 <label className="form-label">Password</label>
@@ -97,7 +93,7 @@ const Login = () => {
                   value={data.password}
                   onChange={handleChange}
                 />
-                {formError.password && <p className="text-danger">{formError.password}</p>}
+                {formError != null && <p className="text-danger">{formError.password}</p>}
               </div>
               <div className="mb-2">
                 <label className="form-check">
@@ -106,7 +102,7 @@ const Login = () => {
                 </label>
               </div>
               <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
+                <button type="submit" className="btn btn-primary w-100" disabled={loading}>
                   {loading ? "Loading..." : "Login"}
                 </button>
               </div>
