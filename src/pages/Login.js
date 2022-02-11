@@ -61,8 +61,9 @@ const Login = () => {
           <div className="text-center mb-4">
             <a href="." className="navbar-brand navbar-brand-autodark">
               <img
-                src="https://dpm-vendor-ui-nzs4n.ondigitalocean.app/static/media/dpm_logo.0a9f7327.png"
-                height="36"
+                src="roadslinks logo.png"
+                height="200"
+                width="200"
                 alt=""
               />
             </a>
