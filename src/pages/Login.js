@@ -65,6 +65,7 @@ const Login = () => {
                 height="200"
                 width="200"
                 alt=""
+                style={{ width: "auto", height: "100px"}}
               />
             </a>
           </div>
