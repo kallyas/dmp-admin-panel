@@ -29,120 +29,76 @@ const VendorProfiles = () => {
 
   return (
     <Layout>
-      <div className="container-xl">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Vendor Profiles</h3>
-            </div>
-            <div className="card-body border-bottom py-3">
-              <div className="d-flex">
-                <div className="text-muted">
-                  show
-                  <div className="mx-2 d-inline-block">
-                    <input
-                      style={{ width: "50px" }}
-                      type="text"
-                      className="form-control form-control-sm"
-                      value={dataPerPage}
-                      size="2"
-                      aria-label="Vendor profiles count"
-                      onChange={handleDataPerPage}
-                    />
-                  </div>
-                  entries
-                </div>
-                <div className="ms-auto text-muted">
-                  Search:
-                  <div className="ms-2 d-inline-block">
-                    <input
-                      type="text"
-                      className="form-control form-control-sm"
-                      aria-label="Search vendors"
-                    />
+      <section className="section dashboard">
+        <div className="row">
+          <div className="col-12">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">Vendors</h5>
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Trade Name</th>
+                      <th scope="col">Phone Number</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Postal Address</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentData.map((vendor, index) => (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{vendor.name}</td>
+                        <td>{vendor.trade_name}</td>
+                        <td>{vendor.phone_number}</td>
+                        <td>{vendor.email}</td>
+                        <td>{vendor.physical_address}</td>
+                        <td>{vendor.postal_address}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="row">
+                  <div className="col-12">
+                    <nav aria-label="Page navigation example">
+                      <ul className="pagination justify-content-end">
+                        <li className="page-item disabled">
+                          <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">
+                            Previous
+                          </a>
+                        </li>
+                        <li className="page-item">
+                          <a className="page-link" href="#">
+                            1
+                          </a>
+                        </li>
+                        <li className="page-item">
+                          <a className="page-link" href="#">
+                            2
+                          </a>
+                        </li>
+                        <li className="page-item">
+                          <a className="page-link" href="#">
+                            3
+                          </a>
+                        </li>
+                        <li className="page-item">
+                          <a className="page-link" href="#">
+                            Next
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="table-responsive">
-              <table className="table card-table table-vcenter text-nowrap datatable">
-                <thead>
-                  <tr>
-                    <th className="w-1">
-                      <input
-                        className="form-check-input m-0 align-middle"
-                        type="checkbox"
-                        aria-label="Select all vendors"
-                      />
-                    </th>
-                    <th className="w-1">
-                      <IconChevronUp />
-                      ID
-                    </th>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Trade Name</th>
-                    <th>Postal Address</th>
-                    <th>Physical Address</th>
-                    <th>Email</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentData.map((vendor) => (
-                    <tr key={vendor.id}>
-                      <td>
-                        <input
-                          className="form-check-input m-0 align-middle"
-                          type="checkbox"
-                          aria-label="Select Vendor"
-                        />
-                      </td>
-                      <td>{vendor.id}</td>
-                      <td>{vendor.name}</td>
-                      <td>{vendor.phone_number}</td>
-                      <td>{vendor.trade_name}</td>
-                      <td>{vendor.postal_address}</td>
-                      <td>{vendor.physical_address}</td>
-                      <td>{vendor.email}</td>
-                      <td className="text-end">
-                        <span className="dropdown">
-                          <button
-                            className="btn dropdown-toggle align-text-top"
-                            data-bs-boundary="viewport"
-                            data-bs-toggle="dropdown"
-                          >
-                            Actions
-                          </button>
-                          <div className="dropdown-menu dropdown-menu-end">
-                            <a className="dropdown-item" href="#">
-                              Action
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              Another action
-                            </a>
-                          </div>
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="card-footer d-flex align-items-center">
-              <p className="m-0 text-muted">
-                Showing <span>1</span> to <span>8</span> of <span>16</span> entries
-              </p>
-              <Pagination
-                dataPerPage={dataPerPage}
-                totalData={vendors.length}
-                paginate={paginate}
-                currentPage={currentPage}
-              />
-            </div>
           </div>
         </div>
-      </div>
+      </section>
     </Layout>
   );
 };

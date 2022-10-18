@@ -1,191 +1,50 @@
 /* eslint-disable */
 import React from "react";
-import {
-  IconBell,
-  IconHome,
-  IconLogout,
-  IconMoon,
-  IconPackage,
-  IconRoute,
-  IconSun,
-  IconUsers,
-} from "@tabler/icons";
+import { useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+  const location = useLocation();
+  const { pathname } = location;
+  // remove the first slash
+  const path = pathname.substring(1);
   return (
-    <aside className="navbar navbar-vertical navbar-expand-lg navbar-dark">
-      <div className="container-fluid">
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbar-menu"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <h1 className="navbar-brand navbar-brand-autodark">
-          <a href="/dashboard">
-            <img
-              src="https://dpm-vendor-ui-nzs4n.ondigitalocean.app/static/media/dpm_logo.0a9f7327.png"
-              width="110"
-              height="32"
-              alt="Tabler"
-              className="navbar-brand-image"
-            />
+    <aside className="sidebar">
+      <ul className="sidebar-nav">
+        <li className="nav-item">
+          <a className={`nav-link ${path == "dashboard" ? "" : "collapsed"}`} href="/dashboard">
+            <i className="bi bi-grid"></i> <span>Dashboard</span>
           </a>
-        </h1>
-        <div className="navbar-nav flex-row d-lg-none">
-          <a
-            href="?theme=dark"
-            className="nav-link px-0 hide-theme-dark"
-            title=""
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            data-bs-original-title="Enable dark mode"
-          >
-            <IconMoon />
+        </li>
+        <li className="nav-item">
+          <a className={`nav-link ${path.includes('vendors') ? "" : "collapsed"}  `}href="/dashboard/vendors">
+            <i className="bi bi-people"></i> <span>Vendors</span>
           </a>
-          <a
-            href="?theme=light"
-            className="nav-link px-0 hide-theme-light"
-            title=""
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            data-bs-original-title="Enable light mode"
-          >
-            <IconSun />
+        </li>
+        {/* add vendors */}
+        <li className="nav-item">
+          <a className={`nav-link ${path.includes('add-vendor') ? "" : "collapsed"}  `}href="/dashboard/add-vendor">
+            <i className="bi bi-person-plus"></i> <span>Add Vendor</span>
           </a>
-          <div className="nav-item dropdown d-none d-md-flex me-3">
-            <a
-              href="#"
-              className="nav-link px-0"
-              data-bs-toggle="dropdown"
-              tabIndex="-1"
-              aria-label="Show notifications"
-            >
-              <IconBell />
-              <span className="badge bg-red"></span>
-            </a>
-            <div className="dropdown-menu dropdown-menu-end dropdown-menu-card">
-              <div className="card">
-                <div className="card-body">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad amet
-                  consectetur exercitationem fugiat in ipsa ipsum, natus odio quidem quod
-                  repudiandae sapiente. Amet debitis et magni maxime necessitatibus ullam.
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="nav-item dropdown">
-            <a
-              href="#"
-              className="nav-link d-flex lh-1 text-reset p-0"
-              data-bs-toggle="dropdown"
-              aria-label="Open user menu"
-            >
-              <span
-                className="avatar avatar-sm"
-                style={{ backgroundImage: "url(./static/avatars/000m.jpg)" }}
-              ></span>
-              <div className="d-none d-xl-block ps-2">
-                <div>Paweł Kuna</div>
-                <div className="mt-1 small text-muted">UI Designer</div>
-              </div>
-            </a>
-            <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-              <a href="#" className="dropdown-item">
-                Settings
-              </a>
-              <a href="/logout" className="dropdown-item">
-                Logout
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="collapse navbar-collapse" id="navbar-menu">
-          <ul className="navbar-nav pt-lg-3">
-            <li className="nav-item">
-              <a className="nav-link" href="/dashboard">
-                <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <IconHome />
-                </span>
-                <span className="nav-link-title"> Home </span>
-              </a>
-            </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#navbar-base"
-                data-bs-auto-close="false"
-                role="button"
-                aria-expanded="false"
-                data-bs-toggle="dropdown"
-              >
-                <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <IconPackage />
-                </span>
-                <span className="nav-link-title">Vendors</span>
-              </a>
-              <div className="dropdown-menu">
-                <div className="dropdown-menu-columns">
-                  <div className="dropdown-menu-column">
-                    <a className="dropdown-item" href="/dashboard/vendors">
-                      Vendors List
-                    </a>
-                    <a className="dropdown-item" href="/dashboard/vendors/add">
-                      Add Vendor
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li className="nav-item">
-              <a className="nav-link" href="/dashboard/routes">
-                <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <IconRoute />
-                </span>
-                <span className="nav-link-title">Bus Routes </span>
-              </a>
-            </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#navbar-base"
-                data-bs-auto-close="false"
-                role="button"
-                aria-expanded="false"
-                data-bs-toggle="dropdown"
-              >
-                <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <IconUsers />
-                </span>
-                <span className="nav-link-title">Staff</span>
-              </a>
-              <div className="dropdown-menu">
-                <div className="dropdown-menu-columns">
-                  <div className="dropdown-menu-column">
-                    <a className="dropdown-item" href="/dashboard/staff">
-                      Staff List
-                    </a>
-                    <a className="dropdown-item" href="/dashboard/staff/add">
-                      Add New Staff
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/logout">
-                <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <IconLogout />
-                </span>
-                <span className="nav-link-title"> Logout </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+        </li>
+        {/* staff */}
+        <li className="nav-item">
+          <a className={`nav-link ${path.includes('staff') ? "" : "collapsed"}  `}href="/dashboard/staff">
+            <i className="bi bi-person-plus"></i> <span>Staff</span>
+          </a>
+        </li>
+        {/* add staff */}
+        <li className="nav-item">
+          <a className={`nav-link ${path.includes('add-staff') ? "" : "collapsed"}  `}href="/dashboard/add-staff">
+            <i className="bi bi-person-plus"></i> <span>Add Staff</span>
+          </a>
+        </li>
+        {/* Bus Routes */}
+        <li className="nav-item">
+          <a className={`nav-link ${path.includes('routes') ? "" : "collapsed"}  `}href="/dashboard/routes">
+            <i className="bi bi-truck"></i> <span>Bus Routes</span>
+          </a>
+        </li>
+      </ul>
     </aside>
   );
 };

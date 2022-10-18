@@ -5,11 +5,11 @@ import VendorForm from "../components/VendorForm";
 const AddVendor = () => {
   return (
     <Layout>
-      <div className="container-xl">
+      <section className="section dashboard">
         <div className="row">
           <VendorForm />
         </div>
-      </div>
+      </section>
     </Layout>
   );
 };

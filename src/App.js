@@ -18,11 +18,11 @@ function App() {
         <Route exact path="/" element={<Login />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/vendors/add" element={<AddVendor />} />
+          <Route path="/dashboard/add-vendor" element={<AddVendor />} />
           <Route path="/dashboard/vendors" element={<VendorProfiles />} />
           <Route path="/dashboard/routes" element={<BusRoutes />} />
           <Route path="/dashboard/staff" element={<Staff />} />
-          <Route path="/dashboard/staff/add" element={<Dashboard />} />
+          <Route path="/dashboard/add-staff" element={<Dashboard />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>

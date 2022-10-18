@@ -28,94 +28,83 @@ const Staff = () => {
 
   return (
     <Layout>
-      <div className="container-xl">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Admin Staff</h3>
-            </div>
-            <div className="card-body border-bottom py-3">
+      <section className="section dashboard">
+        <div className="row">
+          <div className="col-12">
+            <div className="card">
+              <div className="card-header">
+                <h3 className="card-title">Admin Staff</h3>
+              </div>
               <div className="card-body border-bottom py-3">
-                <div className="d-flex">
-                  <div className="text-muted">
-                    show
-                    <div className="mx-2 d-inline-block">
-                      <input
-                        style={{ width: "50px" }}
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={dataPerPage}
-                        onChange={handleDataPerPage}
-                        size="2"
-                        aria-label="Admin staff count"
-                      />
+                <div className="card-body border-bottom py-3">
+                  <div className="d-flex">
+                    <div className="text-muted">
+                      show
+                      <div className="mx-2 d-inline-block">
+                        <input
+                          style={{ width: "50px" }}
+                          type="number"
+                          className="form-control form-control-sm"
+                          value={dataPerPage}
+                          onChange={handleDataPerPage}
+                          size="2"
+                          aria-label="Admin staff count"
+                        />
+                      </div>
+                      entries
                     </div>
-                    entries
-                  </div>
-                  <div className="ms-auto text-muted">
-                    Search:
-                    <div className="ms-2 d-inline-block">
-                      <input
-                        type="text"
-                        className="form-control form-control-sm"
-                        aria-label="Search staff"
-                      />
+                    <div className="ms-auto text-muted">
+                      Search:
+                      <div className="ms-2 d-inline-block">
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          aria-label="Search staff"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="table-responsive">
-                <table className="table card-table table-vcenter text-nowrap datatable">
-                  <thead>
-                    <tr>
-                      <th className="w-1">
-                        <input
-                          className="form-check-input m-0 align-middle"
-                          type="checkbox"
-                          aria-label="Select all staff"
-                        />
-                      </th>
-                      <th className="w-1">
-                        <IconChevronUp />
-                        ID
-                      </th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Email</th>
-                      <th>Phone Number</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentData.map((staff) => (
-                      <tr key={staff.id}>
-                        <td>
-                          <input className="form-check-input m-0 align-middle" type="checkbox" />
-                        </td>
-                        <td>{staff.id}</td>
-                        <td>{staff.first_name}</td>
-                        <td>{staff.last_name}</td>
-                        <td>{staff.email}</td>
-                        <td>{staff.phone_number}</td>
+                <div className="table-responsive">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col"># ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone Number</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="card-footer d-flex align-items-center">
-                <p className="m-0 text-muted">
-                  Showing <span>1</span> to <span>8</span> of <span>{data.length}</span> entries
-                </p>
-                <Pagination
-                  dataPerPage={dataPerPage}
-                  totalData={data.length}
-                  paginate={paginate}
-                  currentPage={currentPage}
-                />
+                    </thead>
+                    <tbody>
+                      {currentData.map((staff) => (
+                        <tr key={staff.id}>
+                          <td>{staff.id}</td>
+                          <td>{staff.first_name}</td>
+                          <td>{staff.last_name}</td>
+                          <td>{staff.email}</td>
+                          <td>{staff.phone_number}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="card-footer d-flex align-items-center">
+                  <p className="m-0 text-muted">
+                    Showing <span>1</span> to <span>8</span> of <span>{data.length}</span> entries
+                  </p>
+                  <Pagination
+                    dataPerPage={dataPerPage}
+                    totalData={data.length}
+                    paginate={paginate}
+                    currentPage={currentPage}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </Layout>
   );
 };
