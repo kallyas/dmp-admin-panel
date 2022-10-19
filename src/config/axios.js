@@ -1,18 +1,17 @@
-import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import axios from "axios";
+require("dotenv").config();
 
 class Api {
-    static axiosInstance = axios;
-    static ACCESS_TOKEN = localStorage.getItem('DPMAccessToken');
-    static initiate() {
-        const baseURL = process.env.REACT_APP_baseURL;
-        Api.axiosInstance.defaults.baseURL = baseURL;
-        Api.axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${Api.ACCESS_TOKEN}`;
-        Api.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json';
-        return Api.axiosInstance.create();
-    }
+  static axiosInstance = axios;
+  static ACCESS_TOKEN = localStorage.getItem("DPMAccessToken");
+  static initiate() {
+    this.axiosInstance.defaults.baseURL = process.env.REACT_APP_API_URL;
+    this.axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${this.ACCESS_TOKEN}`;
+    this.axiosInstance.defaults.headers.common["Content-Type"] = "application/json";
+    // handle cors error
+    this.axiosInstance.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+    return this.axiosInstance.create();
+  }
 }
 
 export default Api;
