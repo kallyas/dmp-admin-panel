@@ -1,8 +1,30 @@
 /* eslint-disable */
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "../components/Layout";
+import { fetchVendors, vendorSelector } from "../features/vendor/vendorSlice";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const { vendors } = useSelector(vendorSelector);
+
+  const [dataPerPage, setDataPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleDataPerPage = (e) => {
+    e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
+  };
+
+  useEffect(() => {
+    dispatch(fetchVendors());
+  }, [dispatch]);
+
+  const indexOfLastData = currentPage * dataPerPage;
+  const indexOfFirstData = indexOfLastData - dataPerPage;
+  const currentData = vendors.slice(indexOfFirstData, indexOfLastData);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <Layout>
       <section className="section dashboard">
@@ -167,23 +189,25 @@ const Dashboard = () => {
                     <table className="table table-borderless">
                       <thead>
                         <tr>
-                          <th scope="col">Preview</th>
-                          <th scope="col">Product</th>
-                          <th scope="col">Price</th>
-                          <th scope="col">Sold</th>
-                          <th scope="col">Revenue</th>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Trade Name</th>
+                          <th scope="col">Phone Number</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Address</th>
+                          <th scope="col">Postal Address</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {[...Array(5)].map((e, i) => (
+                        {currentData.map((e, i) => (
                           <tr key={i}>
-                            <td>
-                              <img src="https://via.placeholder.com/50" alt="product" />
-                            </td>
-                            <td>Product Name</td>
-                            <td>$ 100</td>
-                            <td>10</td>
-                            <td>$ 1000</td>
+                            <th scope="row">{i + 1}</th>
+                            <td>{e.name}</td>
+                            <td>{e.trade_name}</td>
+                            <td>{e.phone_number}</td>
+                            <td>{e.email}</td>
+                            <td>{e.physical_address}</td>
+                            <td>{e.postal_address}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -8,7 +8,7 @@ const Navbar = () => {
       <div className="d-flex align-items-center justify-content-between">
         <a href="index.html" className="logo d-flex align-items-center">
           <img src="roadslinks_logo.png" alt="" />
-          <span className="d-none d-lg-block">Roads Links LTD</span>
+          <span className="d-none d-lg-block">DPM Ltd</span>
         </a>
         <i className="bi bi-list toggle-sidebar-btn"></i>
       </div>
