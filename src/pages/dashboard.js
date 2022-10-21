@@ -1,12 +1,15 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DPMCharts from "../components/DPMCharts";
 import Layout from "../components/Layout";
+import { getRoutes, routesSelector } from "../features/routes/routesSlice";
 import { fetchVendors, vendorSelector } from "../features/vendor/vendorSlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { vendors } = useSelector(vendorSelector);
+  const { data: busRoutes } = useSelector(routesSelector);
 
   const [dataPerPage, setDataPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,6 +20,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(fetchVendors());
+    dispatch(getRoutes());
   }, [dispatch]);
 
   const indexOfLastData = currentPage * dataPerPage;
@@ -31,51 +35,93 @@ const Dashboard = () => {
         <div className="row">
           <div className="col-lg-8">
             <div className="row">
-              {[...Array(2)].map((e, i) => (
-                <div className="col-xxl-4 col-md-6">
-                  <div className="card info-card sales-card">
-                    <div className="filter">
-                      <a className="icon" href="#" data-bs-toggle="dropdown">
-                        <i className="bi bi-three-dots"></i>
-                      </a>
-                      <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <li className="dropdown-header text-start">
-                          <h6>Filter</h6>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Today
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            This Month
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            This Year
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="card-body">
-                      <h5 className="card-title">
-                        Sales <span>| Today</span>
-                      </h5>
-                      <div className="d-flex align-items-center">
-                        <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                          <i className="bi bi-cart"></i>
-                        </div>
-                        <div className="ps-3">
-                          <h6>145</h6> <span className="text-success small pt-1 fw-bold">12%</span>
-                          <span className="text-muted small pt-2 ps-1">increase</span>
-                        </div>
+              <div className="col-xxl-4 col-md-6">
+                <div className="card info-card sales-card">
+                  <div className="filter">
+                    <a className="icon" href="#" data-bs-toggle="dropdown">
+                      <i className="bi bi-three-dots"></i>
+                    </a>
+                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                      <li className="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Today
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          This Month
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          This Year
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="card-body">
+                    <h5 className="card-title">
+                      Vendors <span>| Today</span>
+                    </h5>
+                    <div className="d-flex align-items-center">
+                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i className="bi bi-briefcase"></i>
+                      </div>
+                      <div className="ps-3">
+                        <h6>{vendors?.length}</h6>{" "}
+                        <span className="text-success small pt-1 fw-bold">12%</span>
+                        <span className="text-muted small pt-2 ps-1">increase</span>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+              <div className="col-xxl-4 col-md-6">
+                <div className="card info-card sales-card">
+                  <div className="filter">
+                    <a className="icon" href="#" data-bs-toggle="dropdown">
+                      <i className="bi bi-three-dots"></i>
+                    </a>
+                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                      <li className="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Today
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          This Month
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          This Year
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="card-body">
+                    <h5 className="card-title">
+                      Bus Routes <span>| Today</span>
+                    </h5>
+                    <div className="d-flex align-items-center">
+                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i className="bi bi-truck"></i>
+                      </div>
+                      <div className="ps-3">
+                        <h6>{busRoutes?.length}</h6> <span className="text-success small pt-1 fw-bold">12%</span>
+                        <span className="text-muted small pt-2 ps-1">increase</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="col-xxl-4 col-md-12">
                 <div className="card info-card sales-card">
                   <div className="filter">
@@ -150,7 +196,7 @@ const Dashboard = () => {
                     <h5 className="card-title">
                       Reports <span>/Today</span>
                     </h5>
-                    chart here
+                    <DPMCharts />
                   </div>
                 </div>
               </div>
@@ -249,7 +295,7 @@ const Dashboard = () => {
                   Recent Activity <span>| Today</span>
                 </h5>
                 <div className="activity">
-                  <div className="activity-item d-flex">
+                  {/* <div className="activity-item d-flex">
                     <div className="activite-label">32 min</div>
                     <i className="bi bi-circle-fill activity-badge text-success align-self-start"></i>
                     <div className="activity-content">
@@ -292,7 +338,7 @@ const Dashboard = () => {
                     <div className="activity-content">
                       Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
