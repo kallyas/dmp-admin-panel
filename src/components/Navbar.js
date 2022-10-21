@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <header className="header fixed-top d-flex align-items-center">
       <div className="d-flex align-items-center justify-content-between">
-        <a href="index.html" className="logo d-flex align-items-center">
+        <a href="/dashboard" className="logo d-flex align-items-center">
           <img src="roadslinks_logo.png" alt="" />
           <span className="d-none d-lg-block">DPM Ltd</span>
         </a>
@@ -36,7 +36,7 @@ const Navbar = () => {
                 <hr className="dropdown-divider" />
               </li>
               <li>
-                <a className="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <i className="bi bi-person"></i> <span>My Profile</span>
                 </a>
               </li>
@@ -44,7 +44,7 @@ const Navbar = () => {
                 <hr className="dropdown-divider" />
               </li>
               <li>
-                <a className="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <i className="bi bi-gear"></i> <span>Account Settings</span>
                 </a>
               </li>
@@ -52,7 +52,7 @@ const Navbar = () => {
                 <hr className="dropdown-divider" />
               </li>
               <li>
-                <a className="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <a className="dropdown-item d-flex align-items-center" href="#">
                   <i className="bi bi-question-circle"></i> <span>Need Help?</span>
                 </a>
               </li>
