@@ -61,39 +61,17 @@ const VendorProfiles = () => {
                     ))}
                   </tbody>
                 </table>
-                <div className="row">
-                  <div className="col-12">
-                    <nav aria-label="Page navigation example">
-                      <ul className="pagination justify-content-end">
-                        <li className="page-item disabled">
-                          <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">
-                            Previous
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            1
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            2
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            3
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            Next
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
+              </div>
+              <div className="card-footer d-flex align-items-center">
+                <p className="m-0 text-muted">
+                  Showing <span>{currentPage}</span> to <span>{dataPerPage}</span> of <span>{vendors.length}</span> entries
+                </p>
+                <Pagination
+                  currentPage={currentPage}
+                  dataPerPage={dataPerPage}
+                  totalData={vendors.length}
+                  paginate={paginate}
+                />
               </div>
             </div>
           </div>
