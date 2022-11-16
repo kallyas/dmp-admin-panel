@@ -45,6 +45,7 @@ const VendorProfiles = () => {
                       <th scope="col">Email</th>
                       <th scope="col">Address</th>
                       <th scope="col">Postal Address</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -57,6 +58,11 @@ const VendorProfiles = () => {
                         <td>{vendor.email}</td>
                         <td>{vendor.physical_address}</td>
                         <td>{vendor.postal_address}</td>
+                        <td>
+                          <a href="/dashboard/add-vendor-user" className="btn btn-primary btn-sm">
+                            Add Vendor Admin
+                          </a>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
