@@ -62,9 +62,9 @@ const Login = () => {
           <div className="row justify-content-center">
             <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
               <div className="d-flex justify-content-center py-4">
-                <a href="index.html" className="logo d-flex align-items-center w-auto">
+                <a href="/" className="logo d-flex align-items-center w-auto">
                   <img src="./roadslinks_logo.png" alt="" />
-                  <span className="d-none d-lg-block">RoadsLinks Admin</span>
+                  <span className="d-none d-lg-block">DPM Ltd</span>
                 </a>
               </div>
               <div className="card mb-3">
@@ -116,11 +116,6 @@ const Login = () => {
                       <button className="btn btn-primary w-100" type="submit">
                         {loading ? "Loading..." : "Login"}
                       </button>
-                    </div>
-                    <div className="col-12">
-                      <p className="small mb-0">
-                        Don't have account? <a href="pages-register.html">Create an account</a>
-                      </p>
                     </div>
                   </form>
                 </div>

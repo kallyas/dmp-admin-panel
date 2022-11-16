@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { loginSelector } from "../features/login/loginSlice";
 import jwt_decode from "jwt-decode";
@@ -8,6 +8,9 @@ import APIService from "../config/Api";
 
 const ProtectedRoute = ({ element: Element, ...rest }) => {
   const { isLoggedIn } = useSelector(loginSelector);
+  const navigate = useNavigate();
+
+  console.log("isLoggedIn", isLoggedIn);
 
   const isExpired = () => {
     if (isLoggedIn && localStorage.getItem("DPMAccessToken")) {
@@ -26,8 +29,8 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
 
   // check if token is expired and renew it
   useEffect(() => {
-    if (isLoggedIn == false && localStorage.getItem("DPMAccessToken") === null) {
-      return <Navigate to="/" />;
+    if (!isLoggedIn && localStorage.getItem("DPMAccessToken") === null) {
+      return navigate("/");
     }
     isExpired();
   }, [isLoggedIn]);

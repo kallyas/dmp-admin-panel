@@ -93,7 +93,8 @@ const BusRoutes = () => {
               </div>
               <div className="card-footer d-flex align-items-center">
                 <p className="m-0 text-muted">
-                  Showing <span>1</span> to <span>8</span> of <span>16</span> entries
+                  Showing <span>{currentPage}</span> to <span>{dataPerPage}</span> of{" "}
+                  <span>{data.length}</span> entries
                 </p>
                 <Pagination
                   currentPage={currentPage}
