@@ -49,7 +49,7 @@ const AddStaff = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchVendors);
+    dispatch(fetchVendors());
   }, [dispatch]);
 
   return (
