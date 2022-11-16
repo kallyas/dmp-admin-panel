@@ -50,7 +50,7 @@ const AddStaff = () => {
 
   useEffect(() => {
     dispatch(fetchVendors);
-  });
+  }, [dispatch]);
 
   return (
     <Layout>
