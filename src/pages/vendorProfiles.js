@@ -59,8 +59,8 @@ const VendorProfiles = () => {
                         <td>{vendor.physical_address}</td>
                         <td>{vendor.postal_address}</td>
                         <td>
-                          <a href="/dashboard/add-vendor-user" className="btn btn-primary btn-sm">
-                            Add Vendor Admin
+                          <a href="/dashboard/add-staff" className="btn btn-primary btn-sm">
+                            Add Admin
                           </a>
                         </td>
                       </tr>
