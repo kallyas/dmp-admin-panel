@@ -3,17 +3,17 @@ import axios from "../config/axios";
 const axiosInstance = axios.initiate();
 
 const login = async (payload) => {
-  const res = await axiosInstance.post("/auth/login", payload);
+  const res = await axiosInstance.post("/login", payload);
   return res.data;
 };
 
 const register = async (payload) => {
-  const res = await axiosInstance.post("/auth/register", payload);
+  const res = await axiosInstance.post("/register", payload);
   return res.data;
 };
 
 const logout = async () => {
-  const res = await axiosInstance.post("/auth/logout");
+  const res = await axiosInstance.post("/logout");
   return res.data;
 };
 
