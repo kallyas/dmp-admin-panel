@@ -41,7 +41,7 @@ export const loginSelector = (state) => state.login;
 export const loginUser = (data) => async (dispatch) => {
   dispatch(loginRequest());
   try {
-    const response = await axiosInstance.post("/auth/login", { username: data.email, password: data.password });
+    const response = await axiosInstance.post("/login", { username: data.email, password: data.password });
     //save token to local storage
     localStorage.setItem("DPMAccessToken", response.data?.access_token);
     localStorage.setItem("DPMRefreshToken", response.data?.refresh_token);
