@@ -9,7 +9,7 @@ class APIService {
     if (error && (error.status === 401 || error.message === "Token has expires") && refreshToken) {
       try {
         const result = await this.axios.post(
-          "/auth/refresh",
+          "/refresh",
           {},
           { headers: { Authorization: `Bearer ${refreshToken}` } }
         );
