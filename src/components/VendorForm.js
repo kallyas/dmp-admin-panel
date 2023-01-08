@@ -8,7 +8,7 @@ import { createVendor, vendorSelector } from "../features/vendor/vendorSlice";
 const VendorForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const  { data, loading, error } = useSelector(vendorSelector);
+  const { data, loading, error } = useSelector(vendorSelector);
   const [vendor, setVendor] = useState({
     name: "",
     email: "",
@@ -17,7 +17,15 @@ const VendorForm = () => {
     trade_name: "",
     postal_address: "",
     vendor_type_id: "",
+    area_id: "",
   });
+
+  const regions = [
+    { id: 1, name: "Central" },
+    { id: 2, name: "Northern" },
+    { id: 3, name: "Eastern" },
+    { id: 4, name: "Western" },
+  ];
 
   const handleChange = (e) => {
     setVendor((prev) => ({
@@ -36,7 +44,7 @@ const VendorForm = () => {
 
     if (data) {
       toast.success("Vendor created successfully");
-      navigate("/dashboard/vendors")
+      navigate("/dashboard/vendors");
     }
   };
 
@@ -142,7 +150,7 @@ const VendorForm = () => {
                       required
                     />
                   </div>
-                  <div className="form-group col-md-12">
+                  <div className="form-group col-md-6">
                     <label className="form-label" htmlFor="trade_name">
                       Trade Name:
                     </label>
@@ -156,6 +164,26 @@ const VendorForm = () => {
                       onChange={handleChange}
                       required
                     />
+                  </div>
+                  <div className="form-group col-md-6">
+                    <label className="form-label" htmlFor="area_id">
+                      Area of Operation:
+                    </label>
+                    <select
+                      name="area_id"
+                      className="selectpicker form-control"
+                      data-style="py-0"
+                      value={vendor.area_id}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option>Select Area</option>
+                      {regions.map((region) => (
+                        <option key={region.id} value={region.id}>
+                          {region.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="form-group col-md-6">
                     <label className="form-label" htmlFor="email">

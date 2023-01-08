@@ -36,10 +36,10 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formError)
     if (verifyForm()) {
       dispatch(loginUser(data)).then(() => {
         if (error) {
+          // console.log(error.message);
           return toast.error(error.message);
         } else {
           toast.success("Login Successful");
