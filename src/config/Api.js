@@ -9,7 +9,7 @@ class APIService {
     if (error && (error.status === 401 || error.message === "Token has expires") && refreshToken) {
       try {
         const result = await this.axios.post(
-          "/refresh",
+          "/token/refresh",
           {},
           { headers: { Authorization: `Bearer ${refreshToken}` } }
         );
@@ -25,15 +25,15 @@ class APIService {
   };
 
   getData = async (url) => {
-    return await this.axios.get(`/${url}`);
+    return await this.axios.get(`/v1.0${url}`);
   };
 
   postData = async (url, payload) => {
-    return await this.axios.post(`/${url}`, payload);
+    return await this.axios.post(`/v1.0${url}`, payload);
   };
 
   putData = async (url, payload) => {
-    return await this.axios.put(`/${url}`, payload);
+    return await this.axios.put(`/v1.0${url}`, payload);
   };
 }
 
