@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { authSlice } from "../auth/authSlice";
+import { Mutex } from "async-mutex";
+
+const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_URL,
@@ -12,31 +15,48 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithRetry = async (args, api, extraOptions) => {
-  try {
-    return await baseQuery(args, api, extraOptions);
-  } catch (error) {
-    if (error.status === 401 && error.data?.message === "Token expired") {
-      //   refresh token and retry the request
-      const { dispatch, getState } = api;
-      const { data } = await api.util.fetchBaseQuery(
-        `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
-        {
-          method: "POST",
-          body: JSON.stringify({ token: getState().auth.refreshToken }),
-        },
-        { refetchOnReconnect: false, refetchOnFocus: false }
-      );
-      //   update the token in the store
-      dispatch(authSlice.actions.setToken(data.token));
-      //   retry the request
-      return await baseQuery(args, api, extraOptions);
+  await mutex.waitForUnlock();
+  let result = await baseQuery(args, api, extraOptions);
+  if (
+    result?.error &&
+    result?.error?.status === 401 &&
+    result?.error?.data?.message === "Token expired"
+  ) {
+    if (!mutex.isLocked()) {
+      const release = await mutex.acquire();
+      try {
+        const { getState } = api;
+        const refreshToken = getState().auth.refreshToken;
+        //  add refresh token to headers
+        const headers = new Headers();
+        headers.set("Authorization", `Bearer ${refreshToken}`);
+        const refreshResult = await baseQuery(
+          { url: "/refresh", method: "POST", headers },
+          api,
+          extraOptions
+        );
+        if (refreshResult?.data) {
+          // update access token in store
+          api.dispatch(authSlice.actions.setToken(refreshResult.data));
+          // retry original request
+          result = await baseQuery(args, api, extraOptions);
+        } else {
+          // refresh token expired
+          api.dispatch(authSlice.actions.logout());
+        }
+      } finally {
+        release();
+      }
+    } else {
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
     }
-    throw error;
   }
+  return result;
 };
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithRetry,
-  endpoints: builder => ({}),
+  endpoints: (builder) => ({}),
   tagTypes: ["User"],
 });
