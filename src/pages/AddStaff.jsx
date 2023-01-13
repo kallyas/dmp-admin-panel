@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable */
+import React from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
 import { useCreateStaffMutation } from "../features/staff/staffSlice";
 import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
 
 const AddStaff = () => {
-  const dispatch = useDispatch();
   const [createStaff, { isLoading }] = useCreateStaffMutation();
   const { data: vendors } = useGetVendorsQuery();
 
