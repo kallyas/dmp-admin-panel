@@ -5,7 +5,7 @@ import RequireAuth, { RequireNoAuth } from "./features/auth/RequireAuth";
 import Dashboard from "./pages/dashboard";
 import VendorProfiles from "./pages/vendorProfiles";
 import BusRoutes from "./pages/BusRoutes";
-import Staff from "./pages/staff";
+import Staff from "./pages/Staff";
 import AddVendor from "./pages/addVendor";
 import AddStaff from "./pages/AddStaff";
 import Logout from "./pages/Logout";
