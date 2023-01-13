@@ -1,12 +1,12 @@
 /* eslint-disable */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Layout from "../components/Layout";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Pagination from "../components/pagination";
-import { useGetStaffQuery } from "../features/staff/staffSlice";
+import { useGetStaffsQuery } from "../features/staff/staffSlice";
 
 const Staff = () => {
-  const { data } = useGetStaffQuery 
+  const { data } = useGetStaffsQuery() 
   const dispatch = useDispatch();
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
