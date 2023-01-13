@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -11,44 +12,62 @@ const Sidebar = () => {
     <aside className="sidebar">
       <ul className="sidebar-nav">
         <li className="nav-item">
-          <a className={`nav-link ${path == "dashboard" ? "" : "collapsed"}`} href="/dashboard">
+          <Link to={"/dashboard"} className={`nav-link ${path == "dashboard" ? "" : "collapsed"}`}>
             <i className="bi bi-grid"></i> <span>Dashboard</span>
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className={`nav-link ${path.includes('vendors') ? "" : "collapsed"}  `}href="/dashboard/vendors">
+          <Link
+            className={`nav-link ${path.includes("vendors") ? "" : "collapsed"}  `}
+            to="/dashboard/vendors"
+          >
             <i className="bi bi-people"></i> <span>Vendors</span>
-          </a>
+          </Link>
         </li>
         {/* add vendors */}
         <li className="nav-item">
-          <a className={`nav-link ${path.includes('add-vendor') ? "" : "collapsed"}  `}href="/dashboard/add-vendor">
+          <Link
+            className={`nav-link ${path.includes("add-vendor") ? "" : "collapsed"}  `}
+            to="/dashboard/add-vendor"
+          >
             <i className="bi bi-person-plus"></i> <span>Add Vendor</span>
-          </a>
+          </Link>
         </li>
         {/* staff */}
         <li className="nav-item">
-          <a className={`nav-link ${path.includes('staff') ? "" : "collapsed"}  `}href="/dashboard/staff">
+          <Link
+            className={`nav-link ${path.includes("staff") ? "" : "collapsed"}  `}
+            to="/dashboard/staff"
+          >
             <i className="bi bi-person-plus"></i> <span>Staff</span>
-          </a>
+          </Link>
         </li>
         {/* add staff */}
         <li className="nav-item">
-          <a className={`nav-link ${path.includes('add-staff') ? "" : "collapsed"}  `}href="/dashboard/add-staff">
+          <Link
+            className={`nav-link ${path.includes("add-staff") ? "" : "collapsed"}  `}
+            to="/dashboard/add-staff"
+          >
             <i className="bi bi-person-plus"></i> <span>Add Staff</span>
-          </a>
+          </Link>
         </li>
         {/* Bus Routes */}
         <li className="nav-item">
-          <a className={`nav-link ${path.includes('routes') ? "" : "collapsed"}  `}href="/dashboard/routes">
+          <Link
+            className={`nav-link ${path.includes("routes") ? "" : "collapsed"}  `}
+            to="/dashboard/routes"
+          >
             <i className="bi bi-truck"></i> <span>Bus Routes</span>
-          </a>
+          </Link>
         </li>
         {/* logout */}
         <li className="nav-item">
-          <a className={`nav-link ${path.includes('logout') ? "" : "collapsed"}  `}href="/dashboard/logout">
+          <Link
+            className={`nav-link ${path.includes("logout") ? "" : "collapsed"}  `}
+            to="/dashboard/logout"
+          >
             <i className="bi bi-box-arrow-right"></i> <span>Logout</span>
-          </a>
+          </Link>
         </li>
       </ul>
     </aside>
