@@ -1,4 +1,4 @@
-import { Router, Routes, Route } from "react-router-dom";
+import { createBrowserRouter as Router, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Login from "./pages/Login";
 import RequireAuth, { RequireNoAuth } from "./features/auth/RequireAuth";
@@ -11,26 +11,30 @@ import AddStaff from "./pages/AddStaff";
 import Logout from "./pages/Logout";
 
 function App() {
+  const routes = Router([
+    {
+      path: "/dashboard",
+      element: <RequireAuth />,
+      children: [
+        { path: "", element: <Dashboard /> },
+        { path: "vendors", element: <VendorProfiles /> },
+        { path: "routes", element: <BusRoutes /> },
+        { path: "staff", element: <Staff /> },
+        { path: "add-vendor", element: <AddVendor /> },
+        { path: "add-staff", element: <AddStaff /> },
+        { path: "logout", element: <Logout /> },
+      ],
+    },
+    {
+      path: "/",
+      element: <RequireNoAuth />,
+      children: [{ path: "", element: <Login /> }],
+    },
+  ]);
   return (
-    <>
+    <RouterProvider router={routes}>
       <ToastContainer />
-      <Router>
-        <Routes>
-          <Route path="/" element={<RequireNoAuth />}>
-            <Route index path="" element={<Login />} />
-          </Route>
-          <Route path="/dashboard" element={<RequireAuth />}>
-            <Route index path="" element={<Dashboard />} />
-            <Route path="vendors" element={<VendorProfiles />} />
-            <Route path="routes" element={<BusRoutes />} />
-            <Route path="staff" element={<Staff />} />
-            <Route path="add-vendor" element={<AddVendor />} />
-            <Route path="add-staff" element={<AddStaff />} />
-            <Route path="logout" element={<Logout />} />
-          </Route>
-        </Routes>
-      </Router>
-    </>
+    </RouterProvider>
   );
 }
 
