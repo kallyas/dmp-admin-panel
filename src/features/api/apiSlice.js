@@ -20,7 +20,7 @@ const baseQueryWithRetry = async (args, api, extraOptions) => {
   if (
     result?.error &&
     result?.error?.status === 401 &&
-    result?.error?.data?.message === "Token expired"
+    result?.error?.data?.message === "Token has expired"
   ) {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
