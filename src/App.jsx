@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import Login from "./pages/Login";
 import RequireAuth, { RequireNoAuth } from "./features/auth/RequireAuth";
 import Dashboard from "./pages/dashboard";
+import VendorProfiles from "./pages/vendorProfiles";
 
 function App() {
   const routes = Router([
@@ -24,6 +25,10 @@ function App() {
           path: "",
           element: <Dashboard />,
         },
+        {
+          path: "vendors",
+          element: <VendorProfiles />,
+        }
       ],
     },
   ]);

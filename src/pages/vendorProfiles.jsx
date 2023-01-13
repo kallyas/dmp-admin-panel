@@ -1,15 +1,14 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { vendorSelector, fetchVendors } from "../features/vendor/vendorSlice";
 import Layout from "../components/Layout";
 import { IconChevronUp } from "@tabler/icons";
 import Pagination from "../components/pagination";
+import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
 
 const VendorProfiles = () => {
   const dispatch = useDispatch();
-  const { vendors } = useSelector(vendorSelector);
-
+  const { data: vendors } = useGetVendorsQuery();
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -17,13 +16,9 @@ const VendorProfiles = () => {
     e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
   };
 
-  useEffect(() => {
-    dispatch(fetchVendors());
-  }, [dispatch]);
-
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentData = vendors.slice(indexOfFirstData, indexOfLastData);
+  const currentData = vendors?.slice(indexOfFirstData, indexOfLastData);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -49,7 +44,7 @@ const VendorProfiles = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentData.map((vendor, index) => (
+                    {currentData?.map((vendor, index) => (
                       <tr key={index}>
                         <th scope="row">{index + 1}</th>
                         <td>{vendor.name}</td>
@@ -70,12 +65,13 @@ const VendorProfiles = () => {
               </div>
               <div className="card-footer d-flex align-items-center">
                 <p className="m-0 text-muted">
-                  Showing <span>{currentPage}</span> to <span>{dataPerPage}</span> of <span>{vendors.length}</span> entries
+                  Showing <span>{currentPage}</span> to <span>{dataPerPage}</span> of{" "}
+                  <span>{vendors?.length}</span> entries
                 </p>
                 <Pagination
                   currentPage={currentPage}
                   dataPerPage={dataPerPage}
-                  totalData={vendors.length}
+                  totalData={vendors?.length}
                   paginate={paginate}
                 />
               </div>
