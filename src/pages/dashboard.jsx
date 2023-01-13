@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DPMCharts from "../components/DPMCharts";
 import Layout from "../components/Layout";
-import { getRoutes, routesSelector } from "../features/routes/routesSlice";
-import { fetchVendors, vendorSelector } from "../features/vendor/vendorSlice";
-
+import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
+import { useGetRoutesQuery } from "../features/routes/routesSlice";
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { vendors } = useSelector(vendorSelector);
-  const { data: busRoutes } = useSelector(routesSelector);
+  const { data: vendors } = useGetVendorsQuery();
+  const { data: busRoutes } = useGetRoutesQuery()
+  
 
   const [dataPerPage, setDataPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,14 +18,10 @@ const Dashboard = () => {
     e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
   };
 
-  useEffect(() => {
-    dispatch(fetchVendors());
-    dispatch(getRoutes());
-  }, [dispatch]);
 
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentData = vendors.slice(indexOfFirstData, indexOfLastData);
+  const currentData = vendors?.slice(indexOfFirstData, indexOfLastData);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -245,7 +241,7 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {currentData.map((e, i) => (
+                        {currentData?.map((e, i) => (
                           <tr key={i}>
                             <th scope="row">{i + 1}</th>
                             <td>{e.name}</td>
