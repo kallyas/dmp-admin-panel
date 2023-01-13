@@ -28,6 +28,7 @@ const Login = () => {
           accessToken: response.access_token,
           refreshToken: response.refresh_token,
           user: response.user,
+          regionName: response.region_name,
         })
       );
       toast.success("Login successful");

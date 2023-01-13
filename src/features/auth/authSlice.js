@@ -12,14 +12,17 @@ export const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.user = action.payload.user;
+      state.regionName = action.payload.regionName;
       localStorage.setItem("accessToken", action.payload.accessToken);
       localStorage.setItem("refreshToken", action.payload.refreshToken);
       localStorage.setItem("user", JSON.stringify(action.payload.user));
+      localStorage.setItem("regionName", action.payload.regionName);
     },
     logout: (state) => {
       state.accessToken = null;
       state.refreshToken = null;
       state.user = null;
+      state.regionName = null;
     },
   },
 });
