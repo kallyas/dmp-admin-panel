@@ -3,12 +3,12 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createVendor, vendorSelector } from "../features/vendor/vendorSlice";
+import { useCreateVendorMutation } from "../features/vendor/vendorSlice";
 
 const VendorForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data, loading, error } = useSelector(vendorSelector);
+  const [createVendor, { isLoading }] = useCreateVendorMutation();
   const [vendor, setVendor] = useState({
     name: "",
     email: "",
@@ -34,17 +34,14 @@ const VendorForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createVendor(vendor));
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-
-    if (data) {
+    try {
+      const response = await createVendor(vendor).unwrap();
       toast.success("Vendor created successfully");
       navigate("/dashboard/vendors");
+    } catch (error) {
+      toast.error(error.data.message);
     }
   };
 
@@ -203,7 +200,7 @@ const VendorForm = () => {
                 </div>
                 <hr />
                 <button type="submit" className="btn btn-primary">
-                  {loading ? "Loading..." : "Add New Vendor"}
+                  {isLoading ? "Loading..." : "Add New Vendor"}
                 </button>
               </form>
             </div>

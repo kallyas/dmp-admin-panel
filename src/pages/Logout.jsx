@@ -1,21 +1,22 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../features/login/loginSlice";
 import { useDispatch } from "react-redux";
+import { useLogoutUserMutation } from "../features/login/loginSlice";
 
 const Logout = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [logout, { isLoading }] = useLogoutUserMutation();
+
   useEffect(() => {
-    // clear local storage
-    dispatch(logoutUser());
-    // redirect to login page
-    navigate("/");
-  }, []);
+    logout()
+      .unwrap()
+      .then(() => {
+        navigate("/");
+      });
+  }, [logout, navigate]);
 
   return <div>Logging out and Redirecting to login...</div>;
 };
-
 
 export default Logout;
