@@ -2,57 +2,45 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from "../utils/validations";
+import { setToken } from "../features/auth/authSlice";
 import { useLoginMutation } from "../features/login/loginSlice";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [formError, setFormError] = useState({});
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
+  const [error, setError] = useState(null);
+  const formOptions = { resolver: yupResolver(loginSchema) };
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { errors } = formState;
 
-  const [login, { isLoading, isError, error }] = useLoginMutation();
+  const [login, { isLoading, isError, error: loginError }] = useLoginMutation();
 
-  const handleChange = (e) => {
-    setData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const verifyForm = () => {
-    let invalid = {};
-    if (!data.email) {
-      invalid.email = "Email is required";
-    }
-    if (!data.password) {
-      invalid.password = "Password is required";
-    }
-    setFormError(invalid);
-    return Object.keys(invalid).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    setFormError({});
-    e.preventDefault();
-    if (verifyForm()) {
-      try {
-        const response = await login(data).unwrap();
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-        if (parseInt(error.status) !== error.status) {
-          setFormError({ message: "Something went wrong, please try again later" });
-        } else {
-          setFormError({ message: error.data.message });
-        }
+  const handleLogin = async (data) => {
+    setError(null);
+    try {
+      const response = await login({ username: data.email, password: data.password }).unwrap();
+      dispatch(
+        setToken({
+          accessToken: response.access_token,
+          refreshToken: response.refresh_token,
+          user: response.user,
+        })
+      );
+      toast.success("Login successful");
+      navigate("/dashboard");
+    } catch (error) {
+      if (parseInt(error.status) !== error.status) {
+        setError("Network error, please try again");
+      } else {
+        setError(error.data.message);
       }
     }
   };
-  console.log(formError)
+
   return (
     <div className="container">
       <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
@@ -69,12 +57,14 @@ const Login = () => {
                 <div className="card-body">
                   <div className="pt-4 pb-2">
                     <h5 className="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                    {formError.message && (
-                      <div className="alert alert-danger text-center">{formError.message}</div>
+                    {error && (
+                      <div className="alert alert-danger mt-3" role="alert">
+                        {error}
+                      </div>
                     )}
                   </div>
-                  <form onSubmit={handleSubmit} className="row g-3 needs-validation">
-                    <div className="col-12">
+                  <form onSubmit={handleSubmit(handleLogin)} className="row g-3 needs-validation">
+                    <div className="form-group">
                       <label htmlFor="email" className="form-label">
                         Email
                       </label>
@@ -83,30 +73,30 @@ const Login = () => {
                           @
                         </span>
                         <input
+                          placeholder="Enter your email"
                           type="email"
+                          {...register("email")}
                           name="email"
                           className="form-control"
-                          value={data.email}
-                          onChange={handleChange}
                         />
-                        {formError.email && (
-                          <div className="invalid-feedback">{formError.email}</div>
+                        {errors.email && (
+                          <div className="invalid-feedback">{errors.email.message}</div>
                         )}
                       </div>
                     </div>
-                    <div className="col-12">
+                    <div className="form-group">
                       <label htmlFor="password" className="form-label">
                         Password
                       </label>
                       <input
+                        placeholder="Enter your password"
                         type="password"
+                        {...register("password")}
                         name="password"
                         className="form-control"
-                        value={data.password}
-                        onChange={handleChange}
                       />
-                      {formError.password && (
-                        <div className="invalid-feedback">{formError.password}</div>
+                      {errors.password && (
+                        <div className="invalid-feedback">{errors.password.message}</div>
                       )}
                     </div>
                     <div className="col-12">
