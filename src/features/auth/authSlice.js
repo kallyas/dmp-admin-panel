@@ -23,6 +23,7 @@ export const authSlice = createSlice({
       state.refreshToken = null;
       state.user = null;
       state.regionName = null;
+      localStorage.clear();
     },
   },
 });

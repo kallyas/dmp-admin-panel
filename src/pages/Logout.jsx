@@ -16,7 +16,7 @@ const Logout = () => {
       });
   }, [logout, navigate]);
 
-  return <div>Logging out and Redirecting to login...</div>;
+  return !isLoading && <div>Logging out and Redirecting to login...</div>;
 };
 
 export default Logout;
