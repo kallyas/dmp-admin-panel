@@ -15,7 +15,7 @@ export const staffSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    getStaff: builder.query({
+    getStaffs: builder.query({
       query: () => "/v1.0/users",
     }),
   }),
@@ -24,5 +24,5 @@ export const staffSlice = apiSlice.injectEndpoints({
 
 export const {
   useCreateStaffMutation,
-  useGetStaffQuery,
+  useGetStaffsQuery,
 } = staffSlice;
