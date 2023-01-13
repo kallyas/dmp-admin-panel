@@ -20,11 +20,8 @@ const loginSlice = apiSlice.injectEndpoints({
         url: "/logout",
         method: "POST",
       }),
-      onQueryStarted: (args, { dispatch, queryFulfilled }) => {
+      onQueryStarted: (args, { dispatch }) => {
         dispatch(logout());
-        queryFulfilled.finally(() => {
-          window.location.reload();
-        });
       },
     }),
   }),
