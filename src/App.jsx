@@ -13,51 +13,24 @@ import Logout from "./pages/Logout";
 function App() {
   const routes = Router([
     {
-      path: "/",
-      element: <RequireNoAuth />,
-      children: [
-        {
-          path: "",
-          element: <Login />,
-        },
-      ],
-    },
-    {
       path: "/dashboard",
       element: <RequireAuth />,
       children: [
-        {
-          path: "",
-          element: <Dashboard />,
-        },
-        {
-          path: "vendors",
-          element: <VendorProfiles />,
-        },
-        {
-          path: "routes",
-          element: <BusRoutes />,
-        },
-        {
-          path: "staff",
-          element: <Staff />,
-        },
-        {
-          path: "add-vendor",
-          element: <AddVendor />,
-        },
-        {
-          path: "add-staff",
-          element: <AddStaff />,
-        },
-        {
-          path: "logout",
-          element: <Logout />,
-        }
+        { path: "", element: <Dashboard /> },
+        { path: "vendors", element: <VendorProfiles /> },
+        { path: "routes", element: <BusRoutes /> },
+        { path: "staff", element: <Staff /> },
+        { path: "add-vendor", element: <AddVendor /> },
+        { path: "add-staff", element: <AddStaff /> },
+        { path: "logout", element: <Logout /> },
       ],
     },
+    {
+      path: "/",
+      element: <RequireNoAuth />,
+      children: [{ path: "", element: <Login /> }],
+    },
   ]);
-
   return (
     <RouterProvider router={routes}>
       <ToastContainer />

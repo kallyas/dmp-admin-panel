@@ -18,8 +18,8 @@ const Sidebar = () => {
         </li>
         <li className="nav-item">
           <Link
+            to={"/dashboard/vendors"}
             className={`nav-link ${path.includes("vendors") ? "" : "collapsed"}  `}
-            to="/dashboard/vendors"
           >
             <i className="bi bi-people"></i> <span>Vendors</span>
           </Link>
@@ -27,8 +27,8 @@ const Sidebar = () => {
         {/* add vendors */}
         <li className="nav-item">
           <Link
+            to={"/dashboard/add-vendor"}
             className={`nav-link ${path.includes("add-vendor") ? "" : "collapsed"}  `}
-            to="/dashboard/add-vendor"
           >
             <i className="bi bi-person-plus"></i> <span>Add Vendor</span>
           </Link>
@@ -36,8 +36,8 @@ const Sidebar = () => {
         {/* staff */}
         <li className="nav-item">
           <Link
+            to={"/dashboard/staff"}
             className={`nav-link ${path.includes("staff") ? "" : "collapsed"}  `}
-            to="/dashboard/staff"
           >
             <i className="bi bi-person-plus"></i> <span>Staff</span>
           </Link>
@@ -45,8 +45,8 @@ const Sidebar = () => {
         {/* add staff */}
         <li className="nav-item">
           <Link
+            to={"/dashboard/add-staff"}
             className={`nav-link ${path.includes("add-staff") ? "" : "collapsed"}  `}
-            to="/dashboard/add-staff"
           >
             <i className="bi bi-person-plus"></i> <span>Add Staff</span>
           </Link>
@@ -54,8 +54,8 @@ const Sidebar = () => {
         {/* Bus Routes */}
         <li className="nav-item">
           <Link
+            to={"/dashboard/routes"}
             className={`nav-link ${path.includes("routes") ? "" : "collapsed"}  `}
-            to="/dashboard/routes"
           >
             <i className="bi bi-truck"></i> <span>Bus Routes</span>
           </Link>
@@ -63,8 +63,8 @@ const Sidebar = () => {
         {/* logout */}
         <li className="nav-item">
           <Link
+            to={"/dashboard/logout"}
             className={`nav-link ${path.includes("logout") ? "" : "collapsed"}  `}
-            to="/dashboard/logout"
           >
             <i className="bi bi-box-arrow-right"></i> <span>Logout</span>
           </Link>
