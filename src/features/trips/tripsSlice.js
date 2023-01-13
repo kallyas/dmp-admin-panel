@@ -8,7 +8,7 @@ const initialState = tripsAdapter.getInitialState();
 export const tripsSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getTrips: builder.query({
-      query: () => "/trips",
+      query: () => "/v1.0/trips",
     }),
   }),
   overrideExisting: false,

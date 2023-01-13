@@ -2,6 +2,7 @@ import { createBrowserRouter as Router, RouterProvider } from "react-router-dom"
 import { ToastContainer } from "react-toastify";
 import Login from "./pages/Login";
 import RequireAuth, { RequireNoAuth } from "./features/auth/RequireAuth";
+import Dashboard from "./pages/dashboard";
 
 function App() {
   const routes = Router([
@@ -21,7 +22,7 @@ function App() {
       children: [
         {
           path: "",
-          element: <div>Dashboard</div>,
+          element: <Dashboard />,
         },
       ],
     },

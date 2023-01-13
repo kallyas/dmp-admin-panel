@@ -9,13 +9,13 @@ export const vendorSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createVendor: builder.mutation({
       query: (data) => ({
-        url: "/vendor/create",
+        url: "/v1.0/vendor/create",
         method: "POST",
         body: data,
       }),
     }),
     getVendors: builder.query({
-      query: () => "/vendors",
+      query: () => "/v1.0/vendors",
     }),
   }),
   overrideExisting: false,

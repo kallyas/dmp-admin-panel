@@ -9,13 +9,13 @@ export const staffSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createStaff: builder.mutation({
       query: (data) => ({
-        url: "/user/create",
+        url: "/v1.0/user/create",
         method: "POST",
         body: data,
       }),
     }),
     getStaff: builder.query({
-      query: () => "/users",
+      query: () => "/v1.0/users",
     }),
   }),
   overrideExisting: false,
