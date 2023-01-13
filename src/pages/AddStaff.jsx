@@ -5,8 +5,10 @@ import { toast } from "react-toastify";
 import Layout from "../components/Layout";
 import { useCreateStaffMutation } from "../features/staff/staffSlice";
 import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
+import { useNavigate } from "react-router-dom";
 
 const AddStaff = () => {
+  const navigate = useNavigate();
   const [createStaff, { isLoading }] = useCreateStaffMutation();
   const { data: vendors } = useGetVendorsQuery();
 
@@ -40,6 +42,7 @@ const AddStaff = () => {
         user_type_id: formData.user_type_id,
       }).unwrap();
       toast.success("Vendor admin created successfully");
+      navigate("/dashboard/staff");
     } catch (error) {
       toast.error(error.data.message);
     }
