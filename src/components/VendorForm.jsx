@@ -3,12 +3,12 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createVendor, vendorSelector } from "../features/vendor/vendorSlice";
+import { useCreateVendorMutation } from "../features/vendor/vendorSlice";
 
 const VendorForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const  { data, loading, error } = useSelector(vendorSelector);
+  const [createVendor, { isLoading }] = useCreateVendorMutation();
   const [vendor, setVendor] = useState({
     name: "",
     email: "",
@@ -17,7 +17,15 @@ const VendorForm = () => {
     trade_name: "",
     postal_address: "",
     vendor_type_id: "",
+    area_id: "",
   });
+
+  const regions = [
+    { id: 1, name: "Central" },
+    { id: 2, name: "Northern" },
+    { id: 3, name: "Eastern" },
+    { id: 4, name: "Western" },
+  ];
 
   const handleChange = (e) => {
     setVendor((prev) => ({
@@ -26,17 +34,14 @@ const VendorForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createVendor(vendor));
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-
-    if (data) {
+    try {
+      const response = await createVendor(vendor).unwrap();
       toast.success("Vendor created successfully");
-      navigate("/dashboard/vendors")
+      navigate("/dashboard/vendors");
+    } catch (error) {
+      toast.error(error.data.message);
     }
   };
 
@@ -142,7 +147,7 @@ const VendorForm = () => {
                       required
                     />
                   </div>
-                  <div className="form-group col-md-12">
+                  <div className="form-group col-md-6">
                     <label className="form-label" htmlFor="trade_name">
                       Trade Name:
                     </label>
@@ -156,6 +161,26 @@ const VendorForm = () => {
                       onChange={handleChange}
                       required
                     />
+                  </div>
+                  <div className="form-group col-md-6">
+                    <label className="form-label" htmlFor="area_id">
+                      Area of Operation:
+                    </label>
+                    <select
+                      name="area_id"
+                      className="selectpicker form-control"
+                      data-style="py-0"
+                      value={vendor.area_id}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option>Select Area</option>
+                      {regions.map((region) => (
+                        <option key={region.id} value={region.id}>
+                          {region.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="form-group col-md-6">
                     <label className="form-label" htmlFor="email">
@@ -175,7 +200,7 @@ const VendorForm = () => {
                 </div>
                 <hr />
                 <button type="submit" className="btn btn-primary">
-                  {loading ? "Loading..." : "Add New Vendor"}
+                  {isLoading ? "Loading..." : "Add New Vendor"}
                 </button>
               </form>
             </div>

@@ -1,42 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
-import APIService from "../../config/Api";
+import { createEntityAdapter } from "@reduxjs/toolkit";
+import { apiSlice } from "../api/apiSlice";
 
-const initialState = {
-    trips: [],
-    loading: false,
-    error: null,
-};
+const tripsAdapter = createEntityAdapter();
 
-const tripsSlice = createSlice({
-    name: 'trips',
-    initialState,
-    reducers: {
-        tripsRequest: (state) => {
-            state.loading = true;
-        },
-        tripsSuccess: (state, action) => {
-            state.trips = action.payload;
-            state.loading = false;
-        },
-        tripsFailure: (state, action) => {
-            state.error = action.payload;
-            state.loading = false;
-        }
-    }
+const initialState = tripsAdapter.getInitialState();
+
+export const tripsSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    getTrips: builder.query({
+      query: () => "/v1.0/trips",
+    }),
+  }),
+  overrideExisting: false,
 });
 
-export const { tripsRequest, tripsSuccess, tripsFailure } = tripsSlice.actions;
-
-export const tripsSelector = state => state.trips;
-
-export const fetchTrips = () => async dispatch => {
-    dispatch(tripsRequest());
-    try {
-        const response = await APIService.getData('/trips');
-        dispatch(tripsSuccess(response.data));
-    } catch (error) {
-        dispatch(tripsFailure(error));
-    }
-}
-
-export default tripsSlice.reducer;
+export const { useGetTripsQuery } = tripsSlice;

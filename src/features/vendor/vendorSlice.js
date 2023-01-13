@@ -1,73 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
-import APIService from "../../config/Api";
+import { createEntityAdapter } from "@reduxjs/toolkit";
+import { apiSlice } from "../api/apiSlice";
 
-const initialState = {
-  isLoading: false,
-  error: null,
-  data: [],
-  vendors: [],
-};
+const vendorAdapter = createEntityAdapter();
 
-const vendorSlice = createSlice({
-  name: "vendor",
-  initialState,
-  reducers: {
-    createVendorRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    createVendorSuccess: (state, action) => {
-      state.isLoading = false;
-      state.data = action.payload;
-    },
-    createVendorFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    getVendorRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    getVendorSuccess: (state, action) => {
-      state.isLoading = false;
-      state.vendors = action.payload;
-    },
-    getVendorFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-  },
+const initialState = vendorAdapter.getInitialState();
+
+export const vendorSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    createVendor: builder.mutation({
+      query: (data) => ({
+        url: "/v1.0/vendor/create",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    getVendors: builder.query({
+      query: () => "/v1.0/vendors",
+    }),
+  }),
+  overrideExisting: false,
 });
 
-export const {
-  createVendorRequest,
-  createVendorSuccess,
-  createVendorFailure,
-  getVendorFailure,
-  getVendorRequest,
-  getVendorSuccess,
-} = vendorSlice.actions;
-
-export const vendorSelector = (state) => state.vendor;
-
-export const createVendor = (data) => async (dispatch) => {
-  try {
-    dispatch(createVendorRequest());
-    const response = await APIService.postData("/vendor/create", data);
-    dispatch(createVendorSuccess(response.data));
-  } catch (error) {
-    dispatch(createVendorFailure(error));
-  }
-};
-
-export const fetchVendors = () => async (dispatch) => {
-  try {
-    dispatch(getVendorRequest());
-    const response = await APIService.getData("/vendors");
-    dispatch(getVendorSuccess(response.data));
-  } catch (error) {
-    dispatch(getVendorFailure(error));
-  }
-};
-
-export default vendorSlice.reducer;
+export const { useCreateVendorMutation, useGetVendorsQuery } = vendorSlice;

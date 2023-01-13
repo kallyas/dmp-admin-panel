@@ -1,72 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
-import APIService from "../../config/Api";
+import { createEntityAdapter } from "@reduxjs/toolkit";
+import { apiSlice } from "../api/apiSlice";
 
-const initialState = {
-  isLoading: false,
-  error: null,
-  data: [],
-};
+const staffAdapter = createEntityAdapter();
 
-const staffSlice = createSlice({
-  name: "staff",
-  initialState,
-  reducers: {
-    createStaffRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    createStaffSuccess: (state, action) => {
-      state.isLoading = false;
-      state.data = action.payload;
-    },
-    createStaffFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    getStaffRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    getStaffSuccess: (state, action) => {
-      state.isLoading = false;
-      state.data = action.payload;
-    },
-    getStaffFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-  },
+const initialState = staffAdapter.getInitialState();
+
+export const staffSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    createStaff: builder.mutation({
+      query: (data) => ({
+        url: "/v1.0/user/create",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    getStaff: builder.query({
+      query: () => "/v1.0/users",
+    }),
+  }),
+  overrideExisting: false,
 });
 
 export const {
-  createStaffRequest,
-  createStaffSuccess,
-  createStaffFailure,
-  getStaffFailure,
-  getStaffRequest,
-  getStaffSuccess,
-} = staffSlice.actions;
-
-export const staffSelector = (state) => state.staff;
-
-export const createStaff = (data) => async (dispatch) => {
-  try {
-    dispatch(createStaffRequest());
-    const response = await APIService.postData("/user/create", data);
-    dispatch(createStaffSuccess(response.data));
-  } catch (error) {
-    dispatch(createStaffFailure(error));
-  }
-};
-
-export const getStaff = () => async (dispatch) => {
-  try {
-    dispatch(getStaffRequest());
-    const response = await APIService.getData("/users");
-    dispatch(getStaffSuccess(response.data));
-  } catch (error) {
-    dispatch(getStaffFailure(error));
-  }
-};
-
-export default staffSlice.reducer;
+  useCreateStaffMutation,
+  useGetStaffQuery,
+} = staffSlice;

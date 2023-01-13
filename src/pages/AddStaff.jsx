@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
-import { createStaff, staffSelector } from "../features/staff/staffSlice";
-import { fetchVendors, vendorSelector } from "../features/vendor/vendorSlice";
+import { useCreateStaffMutation } from "../features/staff/staffSlice";
+import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
 
 const AddStaff = () => {
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector(staffSelector);
-  const { vendors } = useSelector(vendorSelector);
+  const [createStaff, { isLoading }] = useCreateStaffMutation();
+  const { data: vendors } = useGetVendorsQuery();
 
   const [formData, setFormData] = React.useState({
     first_name: "",
@@ -27,10 +27,10 @@ const AddStaff = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(
-      createStaff({
+    try {
+      const response = await createStaff({
         first_name: formData.first_name,
         last_name: formData.last_name,
         email: formData.email,
@@ -38,19 +38,12 @@ const AddStaff = () => {
         vendor_id: parseInt(formData.vendor_id),
         password: formData.password,
         user_type_id: formData.user_type_id,
-      })
-    ).then(() => {
-      if (error) {
-        return toast.error(error.message);
-      } else {
-        toast.success("Vendor Admin Created Successfully");
-      }
-    });
+      }).unwrap();
+      toast.success("Vendor admin created successfully");
+    } catch (error) {
+      toast.error(error.data.message);
+    }
   };
-
-  useEffect(() => {
-    dispatch(fetchVendors);
-  });
 
   return (
     <Layout>

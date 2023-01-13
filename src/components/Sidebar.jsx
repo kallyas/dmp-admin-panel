@@ -44,6 +44,12 @@ const Sidebar = () => {
             <i className="bi bi-truck"></i> <span>Bus Routes</span>
           </a>
         </li>
+        {/* logout */}
+        <li className="nav-item">
+          <a className={`nav-link ${path.includes('logout') ? "" : "collapsed"}  `}href="/dashboard/logout">
+            <i className="bi bi-box-arrow-right"></i> <span>Logout</span>
+          </a>
+        </li>
       </ul>
     </aside>
   );

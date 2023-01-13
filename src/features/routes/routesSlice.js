@@ -1,72 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
-import APIService from "../../config/Api";
+import { createEntityAdapter } from "@reduxjs/toolkit";
+import { apiSlice } from "../api/apiSlice";
 
-const initialState = {
-  isLoading: false,
-  error: null,
-  data: [],
-};
+const routesAdapter = createEntityAdapter();
 
-const routesSlice = createSlice({
-  name: "routes",
-  initialState,
-  reducers: {
-    createRouteRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    createRouteSuccess: (state, action) => {
-      state.isLoading = false;
-      state.data = action.payload;
-    },
-    createRouteFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    getRoutesRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    getRoutesSuccess: (state, action) => {
-      state.isLoading = false;
-      state.data = action.payload;
-    },
-    getRoutesFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-  },
+const initialState = routesAdapter.getInitialState();
+
+const routesSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    createRoute: builder.mutation({
+      query: (data) => ({
+        url: "/v1.0/route/create",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    getRoutes: builder.query({
+      query: () => "/v1.0/routes",
+    }),
+  }),
+  overrideExisting: false,
 });
 
-export const {
-  createRouteRequest,
-  createRouteSuccess,
-  createRouteFailure,
-  getRoutesFailure,
-  getRoutesRequest,
-  getRoutesSuccess,
-} = routesSlice.actions;
-
-export const routesSelector = (state) => state.routes;
-
-export const createRoute = (data) => async (dispatch) => {
-  try {
-    dispatch(createRouteRequest());
-    const response = await APIService.postData("/route/create", data);
-    dispatch(createRouteSuccess(response.data));
-  } catch (error) {
-    dispatch(createRouteFailure(error));
-  }
-};
-
-export const getRoutes = () => async (dispatch) => {
-  try {
-    dispatch(getRoutesRequest());
-    const response = await APIService.getData("/routes");
-    dispatch(getRoutesSuccess(response.data));
-  } catch (error) {
-    dispatch(getRoutesFailure(error));
-  }
-};
-
-export default routesSlice.reducer;
+export const { useCreateRouteMutation, useGetRoutesQuery } = routesSlice;
