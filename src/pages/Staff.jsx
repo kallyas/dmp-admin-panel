@@ -1,12 +1,13 @@
 /* eslint-disable */
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import { useDispatch } from "react-redux";
 import Pagination from "../components/pagination";
-import { useGetStaffsQuery } from "../features/staff/staffSlice";
+import { useGetStaffsQuery, useDeleteStaffMutation } from "../features/staff/staffSlice";
 
 const Staff = () => {
-  const { data } = useGetStaffsQuery() 
+  const { data } = useGetStaffsQuery();
   const dispatch = useDispatch();
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,6 +21,20 @@ const Staff = () => {
   const currentData = data?.slice(indexOfFirstData, indexOfLastData);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const [deleteStaff, { isLoading: deleteLoading }] = useDeleteStaffMutation();
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteStaff(id);
+    } catch (error) {
+      if (parseInt(error.status) !== error.status) {
+        console.log("Network error, please try again later");
+      } else {
+        console.log(error.data.message);
+      }
+    }
+  };
 
   return (
     <Layout>
@@ -69,6 +84,7 @@ const Staff = () => {
                         <th scope="col">Last Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
+                        <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -79,6 +95,20 @@ const Staff = () => {
                           <td>{staff.last_name}</td>
                           <td>{staff.email}</td>
                           <td>{staff.phone_number}</td>
+                          <td>
+                            <Link
+                              to={`/dashboard/staff/${staff.id}`}
+                              className="btn btn-sm btn-primary"
+                            >
+                              Edit
+                            </Link>
+                            <button
+                              onClick={() => handleDelete(staff.id)}
+                              className="btn btn-sm btn-danger ms-2"
+                            >
+                              Delete
+                            </button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
