@@ -8,6 +8,7 @@ import BusRoutes from "./pages/BusRoutes";
 import Staff from "./pages/Staff";
 import AddVendor from "./pages/addVendor";
 import AddStaff from "./pages/AddStaff";
+import EditStaff from "./pages/EditStaff";
 import Logout from "./pages/Logout";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         { path: "add-vendor", element: <AddVendor /> },
         { path: "add-staff", element: <AddStaff /> },
         { path: "logout", element: <Logout /> },
+        { path: "staff/:id", element: <EditStaff /> },
       ],
     },
     {
