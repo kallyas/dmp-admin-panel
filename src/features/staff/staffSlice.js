@@ -20,7 +20,7 @@ export const staffSlice = apiSlice.injectEndpoints({
     }),
     deleteStaff: builder.mutation({
       query: (id) => ({
-        url: `/v1.0/user/${id}`,
+        url: `/v1.0/user/${id}/delete`,
         method: "DELETE",
       }),
       invalidatesTags: ["User"],
@@ -30,7 +30,7 @@ export const staffSlice = apiSlice.injectEndpoints({
     }),
     updateStaff: builder.mutation({
       query: (data) => ({
-        url: `/v1.0/user/${data.id}`,
+        url: `/v1.0/user/${data.id}/update`,
         method: "PUT",
         body: data,
       }),
@@ -45,4 +45,5 @@ export const {
   useGetStaffsQuery,
   useDeleteStaffMutation,
   useGetStaffQuery,
+  useUpdateStaffMutation,
 } = staffSlice;

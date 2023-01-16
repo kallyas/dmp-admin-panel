@@ -11,7 +11,7 @@ const loginSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (body) => ({
-        url: "/login",
+        url: "/admin/login",
         method: "POST",
         body,
       }),

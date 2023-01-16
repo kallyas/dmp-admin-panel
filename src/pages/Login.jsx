@@ -27,7 +27,6 @@ const Login = () => {
         setToken({
           accessToken: response.access_token,
           refreshToken: response.refresh_token,
-          regionName: response.region_name,
         })
       );
       toast.success("Login successful");
