@@ -25,8 +25,11 @@ const loginSlice = apiSlice.injectEndpoints({
         dispatch(logout());
       },
     }),
+    loggedInSessions: builder.query({
+      query: () => "/admin/sessions",
+    }),
   }),
   //   overrideExisting: true,
 });
 
-export const { useLoginMutation, useLogoutUserMutation } = loginSlice;
+export const { useLoginMutation, useLogoutUserMutation, useLoggedInSessionsQuery } = loginSlice;

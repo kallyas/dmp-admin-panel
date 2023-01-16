@@ -3,13 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DPMCharts from "../components/DPMCharts";
 import Layout from "../components/Layout";
+import moment from "moment/moment";
 import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
 import { useGetRoutesQuery } from "../features/routes/routesSlice";
+import { useLoggedInSessionsQuery } from "../features/login/loginSlice";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { data: vendors } = useGetVendorsQuery();
-  const { data: busRoutes } = useGetRoutesQuery()
-  
+  const { data: busRoutes } = useGetRoutesQuery();
+  const { data: sessions } = useLoggedInSessionsQuery();
 
   const [dataPerPage, setDataPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,12 +20,12 @@ const Dashboard = () => {
     e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
   };
 
-
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = vendors?.slice(indexOfFirstData, indexOfLastData);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
 
   return (
     <Layout>
@@ -111,7 +113,8 @@ const Dashboard = () => {
                         <i className="bi bi-truck"></i>
                       </div>
                       <div className="ps-3">
-                        <h6>{busRoutes?.length}</h6> <span className="text-success small pt-1 fw-bold">12%</span>
+                        <h6>{busRoutes?.length}</h6>{" "}
+                        <span className="text-success small pt-1 fw-bold">12%</span>
                         <span className="text-muted small pt-2 ps-1">increase</span>
                       </div>
                     </div>
@@ -291,50 +294,20 @@ const Dashboard = () => {
                   Recent Activity <span>| Today</span>
                 </h5>
                 <div className="activity">
-                  {/* <div className="activity-item d-flex">
-                    <div className="activite-label">32 min</div>
-                    <i className="bi bi-circle-fill activity-badge text-success align-self-start"></i>
-                    <div className="activity-content">
-                      Quia quae rerum
-                      <a href="#" className="fw-bold text-dark">
-                        explicabo officiis
-                      </a>
-                      beatae
-                    </div>
-                  </div>
-                  <div className="activity-item d-flex">
-                    <div className="activite-label">56 min</div>
-                    <i className="bi bi-circle-fill activity-badge text-danger align-self-start"></i>
-                    <div className="activity-content">Voluptatem blanditiis blanditiis eveniet</div>
-                  </div>
-                  <div className="activity-item d-flex">
-                    <div className="activite-label">2 hrs</div>
-                    <i className="bi bi-circle-fill activity-badge text-primary align-self-start"></i>
-                    <div className="activity-content">Voluptates corrupti molestias voluptatem</div>
-                  </div>
-                  <div className="activity-item d-flex">
-                    <div className="activite-label">1 day</div>
-                    <i className="bi bi-circle-fill activity-badge text-info align-self-start"></i>
-                    <div className="activity-content">
-                      Tempore autem saepe
-                      <a href="#" className="fw-bold text-dark">
-                        occaecati voluptatem
-                      </a>
-                      tempore
-                    </div>
-                  </div>
-                  <div className="activity-item d-flex">
-                    <div className="activite-label">2 days</div>
-                    <i className="bi bi-circle-fill activity-badge text-warning align-self-start"></i>
-                    <div className="activity-content"> Est sit eum reiciendis exercitationem</div>
-                  </div>
-                  <div className="activity-item d-flex">
-                    <div className="activite-label">4 weeks</div>
-                    <i className="bi bi-circle-fill activity-badge text-muted align-self-start"></i>
-                    <div className="activity-content">
-                      Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
-                    </div>
-                  </div> */}
+                  {/* map through the last 10 sessions */}
+                  {sessions
+                    ?.slice(-20)
+                    .reverse()
+                    .map((e, i) => (
+                      <div className="activity-item d-flex mx-4" key={i}>
+                        <div className="activity-content">
+                          {/* format time like 2 hours ago etc */}
+                          {e?.first_name + " " + e?.last_name} logged in{" "}
+                          {moment(e?.logged_in_at).fromNow()} at{" "}
+                          {moment(e?.logged_in_at).format("h:mm a")}
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
