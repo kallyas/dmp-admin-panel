@@ -31,7 +31,7 @@ const baseQueryWithRetry = async (args, api, extraOptions) => {
         const headers = new Headers();
         headers.set("Authorization", `Bearer ${refreshToken}`);
         const refreshResult = await baseQuery(
-          { url: "/refresh", method: "POST", headers },
+          { url: "/token/refresh", method: "POST", headers },
           api,
           extraOptions
         );
