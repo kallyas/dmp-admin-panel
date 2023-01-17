@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../utils/validations";
 import { setToken } from "../features/auth/authSlice";
@@ -21,6 +21,9 @@ const Login = () => {
 
   const handleLogin = async (data) => {
     setError(null);
+    toast("Logging in...", {
+      icon: "🔒",
+    });
     try {
       const response = await login({ username: data.email, password: data.password }).unwrap();
       dispatch(

@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useCreateVendorMutation } from "../features/vendor/vendorSlice";
+import { toast } from "react-hot-toast";
 
 const VendorForm = () => {
   const dispatch = useDispatch();

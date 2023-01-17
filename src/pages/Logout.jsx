@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useLogoutUserMutation } from "../features/login/loginSlice";
+import { toast } from "react-hot-toast";
 
 const Logout = () => {
   const navigate = useNavigate();
@@ -11,13 +11,15 @@ const Logout = () => {
   const response = async () => {
     try {
       const response = await logout().unwrap();
-      navigate("/login");
+      if (response.status === 200) {
+        toast.success("Logout successfully");
+        navigate("/");
+      }
     } catch (error) {
       if (parseInt(error.status) !== error.status) {
         console.log("Network error, please try again later");
       } else {
-        console.log(error.data.message);
-        console.error(error);
+        console.log(error?.data?.msg);
       }
     }
   };
