@@ -20,13 +20,13 @@ const baseQueryWithRetry = async (args, api, extraOptions) => {
   if (
     result?.error &&
     result?.error?.status === 401 &&
-    result?.error?.data?.message === "Token has expired"
+    result?.error?.data?.msg === "Token has expired"
   ) {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
         const { getState } = api;
-        const refreshToken = getState().auth.refreshToken;
+        const refreshToken = await getState().auth.refreshToken;
         //  add refresh token to headers
         const headers = new Headers();
         headers.set("Authorization", `Bearer ${refreshToken}`);

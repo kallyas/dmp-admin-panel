@@ -17,13 +17,17 @@ export const staffSlice = apiSlice.injectEndpoints({
     }),
     getStaffs: builder.query({
       query: () => "/v1.0/users",
+      providesTags: (result, error, arg) => [
+        ...result.map(({ id }) => ({ type: "User", id })),
+        { type: "User", id: "LIST" },
+      ],
     }),
     deleteStaff: builder.mutation({
       query: (id) => ({
         url: `/v1.0/user/${id}/delete`,
         method: "DELETE",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: (result, error, id) => [{ type: "User", id }], // (result, error, arg
     }),
     getStaff: builder.query({
       query: (id) => `/v1.0/user/${id}`,
@@ -34,7 +38,7 @@ export const staffSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: (result, error, data) => [{ type: "User", id: data.id }], // (result, error, arg
     }),
   }),
   overrideExisting: false,
