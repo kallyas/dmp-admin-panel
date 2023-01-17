@@ -5,6 +5,7 @@ import Layout from "../components/Layout";
 import { useDispatch } from "react-redux";
 import Pagination from "../components/pagination";
 import { useGetStaffsQuery, useDeleteStaffMutation } from "../features/staff/staffSlice";
+import { toast } from "react-hot-toast";
 
 const Staff = () => {
   const { data } = useGetStaffsQuery();
@@ -26,12 +27,17 @@ const Staff = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteStaff(id);
+      toast.promise(deleteStaff(id), {
+        loading: "Deleting...",
+        success: "Deleted successfully",
+        error: "Error, please try again later",
+      });
     } catch (error) {
+      console.log(error);
       if (parseInt(error.status) !== error.status) {
-        console.log("Network error, please try again later");
+        toast.error("Network error, please try again later");
       } else {
-        console.log(error.data.message);
+        toast.error(error?.data?.msg || error?.data?.message || "Error, please try again later");
       }
     }
   };

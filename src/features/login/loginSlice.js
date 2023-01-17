@@ -22,14 +22,6 @@ const loginSlice = apiSlice.injectEndpoints({
         method: "POST",
       }),
       onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
-        console.log("onQueryStarted");
-        // add access token to header
-        const accessToken = await selectAccessToken();
-        console.log("accessToken", accessToken);
-        if (accessToken) {
-          builder.addDefaultHeader("Authorization", `Bearer ${accessToken}`);
-        }
-
         queryFulfilled.finally(() => {
           dispatch(logout());
         });

@@ -1,5 +1,4 @@
 import { createBrowserRouter as Router, RouterProvider } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import Login from "./pages/Login";
 import RequireAuth, { RequireNoAuth } from "./features/auth/RequireAuth";
 import Dashboard from "./pages/dashboard";
@@ -10,6 +9,7 @@ import AddVendor from "./pages/addVendor";
 import AddStaff from "./pages/AddStaff";
 import EditStaff from "./pages/EditStaff";
 import Logout from "./pages/Logout";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const routes = Router([
@@ -34,9 +34,20 @@ function App() {
     },
   ]);
   return (
-    <RouterProvider router={routes}>
-      <ToastContainer />
-    </RouterProvider>
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            fontSize: "14px",
+            // make the  toast bigger and wider
+            width: "200px",
+            height: "50px",
+          },
+        }}
+      />
+      <RouterProvider router={routes} />
+    </>
   );
 }
 

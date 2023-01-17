@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetStaffQuery, useUpdateStaffMutation } from "../features/staff/staffSlice";
+import { toast } from "react-hot-toast";
 
 const EditStaff = () => {
   let { id } = useParams();
@@ -49,13 +50,14 @@ const EditStaff = () => {
     try {
       const response = await UpdateStaff(formData);
       if (response.data.message.includes("updated")) {
+        toast.success("Staff updated successfully");
         navigate("/dashboard/staff");
       }
     } catch (error) {
       if (parseInt(error.status) !== error.status) {
-        console.log("Network error");
+        toast.error("Network error, please try again later");
       } else {
-        console.log(error.message);
+        toast.error(error?.data?.msg || error?.data?.message || "Something went wrong");
       }
     }
   };

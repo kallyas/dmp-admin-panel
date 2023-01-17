@@ -1,11 +1,10 @@
 /* eslint-disable */
 import React from "react";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import Layout from "../components/Layout";
 import { useCreateStaffMutation } from "../features/staff/staffSlice";
 import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const AddStaff = () => {
   const navigate = useNavigate();
