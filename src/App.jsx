@@ -40,7 +40,6 @@ function App() {
         toastOptions={{
           style: {
             fontSize: "14px",
-            // make the  toast bigger and wider
             width: "200px",
             height: "50px",
           },
