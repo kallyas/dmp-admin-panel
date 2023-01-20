@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import { IconChevronUp } from "@tabler/icons";
 import Pagination from "../components/pagination";
@@ -54,9 +55,9 @@ const VendorProfiles = () => {
                         <td>{vendor.physical_address}</td>
                         <td>{vendor.postal_address}</td>
                         <td>
-                          <a href="/dashboard/add-staff" className="btn btn-primary btn-sm">
+                          <Link to="/dashboard/add-staff" className="btn btn-primary btn-sm">
                             Add Admin
-                          </a>
+                          </Link>
                         </td>
                       </tr>
                     ))}
