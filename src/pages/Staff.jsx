@@ -88,6 +88,7 @@ const Staff = () => {
                         <th scope="col"># ID</th>
                         <th scope="col">First Name</th>
                         <th scope="col">Last Name</th>
+                        <th scope="col">Vendor</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
                         <th scope="col">Action</th>
@@ -99,6 +100,7 @@ const Staff = () => {
                           <td>{staff.id}</td>
                           <td>{staff.first_name}</td>
                           <td>{staff.last_name}</td>
+                          <td>{staff.vendor_name}</td>
                           <td>{staff.email}</td>
                           <td>{staff.phone_number}</td>
                           <td>
