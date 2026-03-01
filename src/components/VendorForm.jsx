@@ -1,31 +1,50 @@
-/* eslint-disable */
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useCreateVendorMutation } from "../features/vendor/vendorSlice";
-import { toast } from "react-hot-toast";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
+import { useCreateVendor } from '../api/hooks';
+
+const VENDOR_TYPES = [
+  { id: 1, name: 'Bus' },
+  { id: 2, name: 'Taxi' },
+  { id: 3, name: 'Bus & Taxi' },
+];
+
+const REGIONS = [
+  { id: 1, name: 'Central' },
+  { id: 2, name: 'Northern' },
+  { id: 3, name: 'Eastern' },
+  { id: 4, name: 'Western' },
+];
 
 const VendorForm = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [createVendor, { isLoading }] = useCreateVendorMutation();
-  const [vendor, setVendor] = useState({
-    name: "",
-    email: "",
-    phone_number: "",
-    physical_address: "",
-    trade_name: "",
-    postal_address: "",
-    vendor_type_id: "",
-    area_id: "",
-  });
+  const createVendorMutation = useCreateVendor();
+  const [error, setError] = useState(null);
 
-  const regions = [
-    { id: 1, name: "Central" },
-    { id: 2, name: "Northern" },
-    { id: 3, name: "Eastern" },
-    { id: 4, name: "Western" },
-  ];
+  const [vendor, setVendor] = useState({
+    name: '',
+    email: '',
+    phone_number: '',
+    physical_address: '',
+    trade_name: '',
+    postal_address: '',
+    vendor_type_id: '',
+    area_id: '',
+  });
 
   const handleChange = (e) => {
     setVendor((prev) => ({
@@ -36,178 +55,154 @@ const VendorForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     try {
-      const response = await createVendor(vendor).unwrap();
-      toast.success("Vendor created successfully");
-      navigate("/dashboard/vendors");
-    } catch (error) {
-      toast.error(error.data.message);
+      await createVendorMutation.mutateAsync(vendor);
+      navigate('/dashboard/vendors');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to create vendor');
     }
   };
 
   return (
-    <>
-      <div className="col-xl-3 col-lg-4">
-        <div className="card">
-          <div className="card-header d-flex justify-content-between">
-            <div className="header-title">
-              <h4 className="card-title">Add New Vendor</h4>
-            </div>
-          </div>
-          <div className="card-body">
-            <form>
-              <div className="form-group">
-                <label className="form-label">Vendor Type:</label>
-                <select
-                  name="vendor_type_id"
-                  className="selectpicker form-control"
-                  data-style="py-0"
-                  value={vendor.vendor_type_id}
-                  onChange={handleChange}
-                  required
-                >
-                  <option>Select Vendor Type</option>
-                  <option value="1">Bus</option>
-                  <option value="2">Taxi</option>
-                  <option value="3">Bus & Taxi</option>
-                </select>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div className="col-xl-8 col-lg-7">
-        <div className="card">
-          <div className="card-header d-flex justify-content-between">
-            <div className="header-title">
-              <h4 className="card-title">New Vendor Information</h4>
-            </div>
-          </div>
-          <div className="card-body">
-            <div className="new-user-info">
-              <form onSubmit={handleSubmit}>
-                <div className="row">
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="name">
-                      Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="name"
-                      name="name"
-                      placeholder="Name"
-                      value={vendor.name}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="phone_number">
-                      Phone Number:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="phone_number"
-                      id="phone"
-                      placeholder="0712345678"
-                      value={vendor.phone_number}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="physical_address">
-                      Physical Address:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="physical_address"
-                      id="physicaladdress"
-                      placeholder="physicaladdress"
-                      value={vendor.physical_address}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="postal_address">
-                      Postal Address:
-                    </label>
-                    <input
-                      name="postal_address"
-                      type="text"
-                      className="form-control"
-                      id="postaladdress"
-                      placeholder="P.O. Box XXXX Kampala"
-                      value={vendor.postal_address}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="trade_name">
-                      Trade Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="cname"
-                      name="trade_name"
-                      placeholder="Link Bus Limited"
-                      value={vendor.trade_name}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="area_id">
-                      Area of Operation:
-                    </label>
-                    <select
+    <Grid container spacing={3}>
+      <Grid item xs={12} md={4}>
+        <Card>
+          <CardHeader title="Add New Vendor" />
+          <CardContent>
+            <FormControl fullWidth>
+              <InputLabel>Vendor Type</InputLabel>
+              <Select
+                name="vendor_type_id"
+                value={vendor.vendor_type_id}
+                onChange={handleChange}
+                label="Vendor Type"
+              >
+                {VENDOR_TYPES.map((type) => (
+                  <MenuItem key={type.id} value={type.id}>
+                    {type.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} md={8}>
+        <Card>
+          <CardHeader title="New Vendor Information" />
+          <CardContent>
+            {error && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {error}
+              </Alert>
+            )}
+
+            <Box component="form" onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Name"
+                    name="name"
+                    value={vendor.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Phone Number"
+                    name="phone_number"
+                    value={vendor.phone_number}
+                    onChange={handleChange}
+                    placeholder="0712345678"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Physical Address"
+                    name="physical_address"
+                    value={vendor.physical_address}
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Postal Address"
+                    name="postal_address"
+                    value={vendor.postal_address}
+                    onChange={handleChange}
+                    placeholder="P.O. Box XXXX Kampala"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Trade Name"
+                    name="trade_name"
+                    value={vendor.trade_name}
+                    onChange={handleChange}
+                    placeholder="Link Bus Limited"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel>Area of Operation</InputLabel>
+                    <Select
                       name="area_id"
-                      className="selectpicker form-control"
-                      data-style="py-0"
                       value={vendor.area_id}
                       onChange={handleChange}
+                      label="Area of Operation"
                       required
                     >
-                      <option>Select Area</option>
-                      {regions.map((region) => (
-                        <option key={region.id} value={region.id}>
+                      {REGIONS.map((region) => (
+                        <MenuItem key={region.id} value={region.id}>
                           {region.name}
-                        </option>
+                        </MenuItem>
                       ))}
-                    </select>
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label className="form-label" htmlFor="email">
-                      Email:
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="email"
-                      name="email"
-                      placeholder="johndoe@gmail.com"
-                      value={vendor.email}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-                <hr />
-                <button type="submit" className="btn btn-primary">
-                  {isLoading ? "Loading..." : "Add New Vendor"}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={vendor.email}
+                    onChange={handleChange}
+                    placeholder="johndoe@gmail.com"
+                    required
+                  />
+                </Grid>
+              </Grid>
+
+              <Box sx={{ mt: 3 }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={createVendorMutation.isPending}
+                >
+                  {createVendorMutation.isPending ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    'Add New Vendor'
+                  )}
+                </Button>
+              </Box>
+            </Box>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };
 

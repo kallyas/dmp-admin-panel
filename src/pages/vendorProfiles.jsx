@@ -1,86 +1,127 @@
-/* eslint-disable */
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import Layout from "../components/Layout";
-import { IconChevronUp } from "@tabler/icons";
-import Pagination from "../components/pagination";
-import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Paper,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Pagination,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { useVendors } from '../api/hooks';
 
 const VendorProfiles = () => {
-  const dispatch = useDispatch();
-  const { data: vendors } = useGetVendorsQuery();
-  const [dataPerPage, setDataPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { data: vendors, isLoading } = useVendors();
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 10;
 
-  const handleDataPerPage = (e) => {
-    e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
-  };
-
-  const indexOfLastData = currentPage * dataPerPage;
-  const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentData = vendors?.slice(indexOfFirstData, indexOfLastData);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginatedVendors = vendors?.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
+  const totalPages = Math.ceil((vendors?.length || 0) / rowsPerPage);
 
   return (
-    <Layout>
-      <section className="section dashboard">
-        <div className="row">
-          <div className="col-12">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Vendors</h5>
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Trade Name</th>
-                      <th scope="col">Phone Number</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Address</th>
-                      <th scope="col">Postal Address</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentData?.map((vendor, index) => (
-                      <tr key={index}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{vendor.name}</td>
-                        <td>{vendor.trade_name}</td>
-                        <td>{vendor.phone_number}</td>
-                        <td>{vendor.email}</td>
-                        <td>{vendor.physical_address}</td>
-                        <td>{vendor.postal_address}</td>
-                        <td>
-                          <Link to="/dashboard/add-staff" className="btn btn-primary btn-sm">
-                            Add Admin
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="card-footer d-flex align-items-center">
-                <p className="m-0 text-muted">
-                  Showing <span>{currentPage}</span> to <span>{dataPerPage}</span> of{" "}
-                  <span>{vendors?.length}</span> entries
-                </p>
-                <Pagination
-                  currentPage={currentPage}
-                  dataPerPage={dataPerPage}
-                  totalData={vendors?.length}
-                  paginate={paginate}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </Layout>
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        Vendors
+      </Typography>
+
+      <Card>
+        <CardContent>
+          <TableContainer component={Paper} elevation={0}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>#</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Trade Name</TableCell>
+                  <TableCell>Phone</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Address</TableCell>
+                  <TableCell>Postal Address</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(5)].map((_, i) => (
+                    <TableRow key={i}>
+                      {[...Array(8)].map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : paginatedVendors?.length > 0 ? (
+                  paginatedVendors.map((vendor, index) => (
+                    <TableRow key={vendor.id || index}>
+                      <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
+                      <TableCell>{vendor.name}</TableCell>
+                      <TableCell>{vendor.trade_name}</TableCell>
+                      <TableCell>{vendor.phone_number}</TableCell>
+                      <TableCell>{vendor.email}</TableCell>
+                      <TableCell>{vendor.physical_address}</TableCell>
+                      <TableCell>{vendor.postal_address}</TableCell>
+                      <TableCell>
+                        <Button
+                          component={Link}
+                          to="/dashboard/add-staff"
+                          variant="contained"
+                          size="small"
+                          startIcon={<AddIcon />}
+                        >
+                          Add Admin
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={8} align="center">
+                      No vendors found
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mt: 2,
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              Showing {(page - 1) * rowsPerPage + 1} to{' '}
+              {Math.min(page * rowsPerPage, vendors?.length || 0)} of{' '}
+              {vendors?.length || 0} entries
+            </Typography>
+            {totalPages > 1 && (
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(_, value) => setPage(value)}
+                color="primary"
+              />
+            )}
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 
