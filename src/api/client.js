@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '../app/store';
 import { setToken, logout } from '../features/auth/authSlice';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.roadslinks.com';
+const API_URL = 'https://api.roadslinks.com';
 
 export const apiClient = axios.create({
   baseURL: API_URL,
