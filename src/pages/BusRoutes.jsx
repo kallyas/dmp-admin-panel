@@ -1,109 +1,126 @@
-/* eslint-disable */
-import { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import { useDispatch, useSelector } from "react-redux";
-import Pagination from "../components/pagination";
-import { useGetRoutesQuery } from "../features/routes/routesSlice";
+import { useState } from 'react';
+import {
+  Box,
+  Card,
+  CardContent,
+  Paper,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+  Pagination,
+} from '@mui/material';
+import { useRoutes } from '../api/hooks';
 
 const BusRoutes = () => {
-  const { data } = useGetRoutesQuery()
-  const dispatch = useDispatch();
+  const { data, isLoading } = useRoutes();
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const rowsPerPage = 10;
 
-  const [dataPerPage, setDataPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+  const filteredData = data?.filter(
+    (route) =>
+      route.route_code?.toLowerCase().includes(search.toLowerCase()) ||
+      route.start_point?.toLowerCase().includes(search.toLowerCase()) ||
+      route.destination?.toLowerCase().includes(search.toLowerCase())
+  );
 
-  const handleDataPerPage = (e) => {
-    e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
-  };
-
-
-  const indexOfLastData = currentPage * dataPerPage;
-  const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentData = data?.slice(indexOfFirstData, indexOfLastData);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginatedData = filteredData?.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
+  const totalPages = Math.ceil((filteredData?.length || 0) / rowsPerPage);
 
   return (
-    <Layout>
-      <section className="section dashboard">
-        <div className="row">
-          <div className="col-12">
-            <div className="card">
-              <div className="card-header">
-                <h3 className="card-title">Bus Routes</h3>
-              </div>
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        Bus Routes
+      </Typography>
 
-              <div className="card-body border-bottom py-3">
-                <div className="d-flex">
-                  <div className="text-muted">
-                    show
-                    <div className="mx-2 d-inline-block">
-                      <input
-                        style={{ width: "50px" }}
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={dataPerPage}
-                        size="2"
-                        aria-label="Bus Routes count"
-                        onChange={handleDataPerPage}
-                      />
-                    </div>
-                    entries
-                  </div>
-                  <div className="ms-auto text-muted">
-                    Search:
-                    <div className="ms-2 d-inline-block">
-                      <input
-                        type="text"
-                        className="form-control form-control-sm"
-                        aria-label="Search Bus Routes"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="table-responsive">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col"># ID</th>
-                      <th scope="col">Route Name</th>
-                      <th scope="col">Start Point</th>
-                      <th scope="col">Destination</th>
-                      <th scope="col">Route Code</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data &&
-                      currentData?.map((route) => (
-                        <tr key={route.id}>
-                          <td>{route.id}</td>
-                          <td>{route.route_code}</td>
-                          <td>{route.start_point}</td>
-                          <td>{route.destination}</td>
-                          <td>{route.route_code}</td>
-                        </tr>
+      <Card>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <TextField
+              size="small"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Box>
+
+          <TableContainer component={Paper} elevation={0}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell># ID</TableCell>
+                  <TableCell>Route Name</TableCell>
+                  <TableCell>Start Point</TableCell>
+                  <TableCell>Destination</TableCell>
+                  <TableCell>Route Code</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(5)].map((_, i) => (
+                    <TableRow key={i}>
+                      {[...Array(5)].map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton />
+                        </TableCell>
                       ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="card-footer d-flex align-items-center">
-                <p className="m-0 text-muted">
-                  Showing <span>{currentPage}</span> to <span>{dataPerPage}</span> of{" "}
-                  <span>{data?.length}</span> entries
-                </p>
-                <Pagination
-                  currentPage={currentPage}
-                  dataPerPage={dataPerPage}
-                  totalData={data?.length}
-                  paginate={paginate}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </Layout>
+                    </TableRow>
+                  ))
+                ) : paginatedData?.length > 0 ? (
+                  paginatedData.map((route) => (
+                    <TableRow key={route.id}>
+                      <TableCell>{route.id}</TableCell>
+                      <TableCell>{route.route_code}</TableCell>
+                      <TableCell>{route.start_point}</TableCell>
+                      <TableCell>{route.destination}</TableCell>
+                      <TableCell>{route.route_code}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      No routes found
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mt: 2,
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              Showing {(page - 1) * rowsPerPage + 1} to{' '}
+              {Math.min(page * rowsPerPage, filteredData?.length || 0)} of{' '}
+              {filteredData?.length || 0} entries
+            </Typography>
+            {totalPages > 1 && (
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(_, value) => setPage(value)}
+                color="primary"
+              />
+            )}
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 
