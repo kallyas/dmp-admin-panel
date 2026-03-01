@@ -4,7 +4,7 @@ import { Box, Toolbar } from '@mui/material';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
-const DRAWER_WIDTH = 280;
+const DRAWER_WIDTH = 260;
 
 const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <Navbar drawerWidth={DRAWER_WIDTH} onMenuClick={handleDrawerToggle} />
       <Sidebar
         drawerWidth={DRAWER_WIDTH}
@@ -25,27 +25,30 @@ const Layout = ({ children }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-          backgroundColor: 'background.default',
           minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <Toolbar />
-        {children || <Outlet />}
+        <Toolbar sx={{ minHeight: { xs: 64, sm: 70 } }} />
+        <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+          {children || <Outlet />}
+        </Box>
         <Box
           component="footer"
           sx={{
-            mt: 'auto',
-            py: 3,
+            py: 2,
+            px: 3,
             textAlign: 'center',
-            color: 'text.secondary',
-            fontSize: '0.875rem',
+            borderTop: 1,
+            borderColor: 'divider',
+            bgcolor: 'background.paper',
           }}
         >
-          © Copyright {new Date().getFullYear()} <strong>Roads Links</strong>. All Rights Reserved
-          <br />
-          Designed by <a href="https://github.com/kallyas/">Iden</a>
+          <Box component="span" sx={{ color: 'text.secondary', fontSize: '0.75rem' }}>
+            © {new Date().getFullYear()} Roads Links. All rights reserved.
+          </Box>
         </Box>
       </Box>
     </Box>
