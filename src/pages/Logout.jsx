@@ -1,34 +1,45 @@
-/* eslint-disable */
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLogoutUserMutation } from "../features/login/loginSlice";
-import { toast } from "react-hot-toast";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { useLogout } from '../api/hooks';
+import { logout } from '../features/auth/authSlice';
 
 const Logout = () => {
   const navigate = useNavigate();
-  const [logout, { isLoading }] = useLogoutUserMutation();
-
-  const response = async () => {
-    try {
-      const response = await logout().unwrap();
-      if (response.status === 200) {
-        toast.success("Logout successfully");
-        navigate("/");
-      }
-    } catch (error) {
-      if (parseInt(error.status) !== error.status) {
-        console.log("Network error, please try again later");
-      } else {
-        console.log(error?.data?.msg);
-      }
-    }
-  };
+  const dispatch = useDispatch();
+  const logoutMutation = useLogout();
 
   useEffect(() => {
-    response();
+    const performLogout = async () => {
+      try {
+        await logoutMutation.mutateAsync();
+      } catch (error) {
+        console.error('Logout error:', error);
+      } finally {
+        dispatch(logout());
+        navigate('/');
+      }
+    };
+
+    performLogout();
   }, []);
 
-  return !isLoading && <div>Logging out and Redirecting to login...</div>;
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '50vh',
+        gap: 2,
+      }}
+    >
+      <CircularProgress />
+      <Typography>Logging out...</Typography>
+    </Box>
+  );
 };
 
 export default Logout;
