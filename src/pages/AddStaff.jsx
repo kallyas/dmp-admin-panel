@@ -8,14 +8,18 @@ import {
   CardContent,
   CardHeader,
   CircularProgress,
+  Divider,
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { useCreateStaff, useVendors } from '../api/hooks';
 
 const AddStaff = () => {
@@ -57,32 +61,34 @@ const AddStaff = () => {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        Add Vendor Admin
-      </Typography>
-
       <Card>
-        <CardHeader title="New Staff Information" />
-        <CardContent>
+        <CardHeader
+          title="Add Vendor Admin"
+          subheader="Create a new staff member for vendor management"
+          action={
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<ArrowBackIcon />}
+              onClick={() => navigate('/dashboard/staff')}
+            >
+              Back to Staff
+            </Button>
+          }
+        />
+        <Divider />
+        <CardContent sx={{ p: 3 }}>
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
               {error}
             </Alert>
           )}
 
           <Box component="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
+              Personal Information
+            </Typography>
+            <Grid container spacing={2.5}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
@@ -91,6 +97,7 @@ const AddStaff = () => {
                   value={formData.first_name}
                   onChange={handleChange}
                   required
+                  placeholder="Enter first name"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -101,6 +108,25 @@ const AddStaff = () => {
                   value={formData.last_name}
                   onChange={handleChange}
                   required
+                  placeholder="Enter last name"
+                />
+              </Grid>
+            </Grid>
+
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 4, mb: 2 }}>
+              Contact Details
+            </Typography>
+            <Grid container spacing={2.5}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="email@example.com"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -111,16 +137,23 @@ const AddStaff = () => {
                   value={formData.phone_number}
                   onChange={handleChange}
                   required
+                  placeholder="+255 XXX XXX XXX"
                 />
               </Grid>
+            </Grid>
+
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 4, mb: 2 }}>
+              Account Settings
+            </Typography>
+            <Grid container spacing={2.5}>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
-                  <InputLabel>Vendor</InputLabel>
+                  <InputLabel>Assign to Vendor</InputLabel>
                   <Select
                     name="vendor_id"
                     value={formData.vendor_id}
                     onChange={handleChange}
-                    label="Vendor"
+                    label="Assign to Vendor"
                   >
                     {vendors?.map((vendor) => (
                       <MenuItem key={vendor.id} value={vendor.id}>
@@ -139,23 +172,34 @@ const AddStaff = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  placeholder="Enter secure password"
+                  helperText="Minimum 8 characters"
                 />
               </Grid>
             </Grid>
 
-            <Box sx={{ mt: 3 }}>
+            <Divider sx={{ my: 4 }} />
+
+            <Stack direction="row" spacing={2} justifyContent="flex-end">
+              <Button
+                variant="outlined"
+                onClick={() => navigate('/dashboard/staff')}
+              >
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 variant="contained"
                 disabled={createStaffMutation.isPending}
+                startIcon={createStaffMutation.isPending ? null : <SaveOutlinedIcon />}
               >
                 {createStaffMutation.isPending ? (
-                  <CircularProgress size={24} color="inherit" />
+                  <CircularProgress size={22} color="inherit" />
                 ) : (
-                  'Add Vendor Admin'
+                  'Create Staff Member'
                 )}
               </Button>
-            </Box>
+            </Stack>
           </Box>
         </CardContent>
       </Card>

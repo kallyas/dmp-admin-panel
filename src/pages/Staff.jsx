@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
+  Avatar,
   Box,
   Button,
   Card,
-  CardContent,
+  CardHeader,
+  Chip,
   IconButton,
-  Paper,
+  InputAdornment,
   Skeleton,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +18,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
   Pagination,
   Dialog,
@@ -23,8 +27,11 @@ import {
   DialogContentText,
   DialogActions,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useStaff, useDeleteStaff } from '../api/hooks';
 
 const Staff = () => {
@@ -70,126 +77,202 @@ const Staff = () => {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        Admin Staff
-      </Typography>
-
       <Card>
-        <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-            <TextField
-              size="small"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </Box>
-
-          <TableContainer component={Paper} elevation={0}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell># ID</TableCell>
-                  <TableCell>First Name</TableCell>
-                  <TableCell>Last Name</TableCell>
-                  <TableCell>Vendor</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Phone</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {isLoading ? (
-                  [...Array(5)].map((_, i) => (
-                    <TableRow key={i}>
-                      {[...Array(7)].map((_, j) => (
-                        <TableCell key={j}>
-                          <Skeleton />
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : paginatedData?.length > 0 ? (
-                  paginatedData.map((staff) => (
-                    <TableRow key={staff.id}>
-                      <TableCell>{staff.id}</TableCell>
-                      <TableCell>{staff.first_name}</TableCell>
-                      <TableCell>{staff.last_name}</TableCell>
-                      <TableCell>{staff.vendor_name}</TableCell>
-                      <TableCell>{staff.email}</TableCell>
-                      <TableCell>{staff.phone_number}</TableCell>
-                      <TableCell>
+        <CardHeader
+          title="Staff Management"
+          subheader={`${data?.length || 0} total staff members`}
+          action={
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <TextField
+                size="small"
+                placeholder="Search staff..."
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" color="action" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ width: 220 }}
+              />
+              <Button
+                component={Link}
+                to="/dashboard/add-staff"
+                variant="contained"
+                startIcon={<AddIcon />}
+                size="small"
+              >
+                Add Staff
+              </Button>
+            </Stack>
+          }
+        />
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Staff Member</TableCell>
+                <TableCell>Vendor</TableCell>
+                <TableCell>Contact</TableCell>
+                <TableCell>Role</TableCell>
+                <TableCell align="right">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {isLoading ? (
+                [...Array(5)].map((_, i) => (
+                  <TableRow key={i}>
+                    {[...Array(5)].map((_, j) => (
+                      <TableCell key={j}>
+                        <Skeleton />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : paginatedData?.length > 0 ? (
+                paginatedData.map((staff) => (
+                  <TableRow key={staff.id} hover>
+                    <TableCell>
+                      <Stack direction="row" alignItems="center" spacing={1.5}>
+                        <Avatar
+                          sx={{
+                            width: 36,
+                            height: 36,
+                            bgcolor: 'primary.main',
+                            fontSize: '0.8125rem',
+                          }}
+                        >
+                          {staff.first_name?.[0]}
+                          {staff.last_name?.[0]}
+                        </Avatar>
+                        <Box>
+                          <Typography variant="body2" fontWeight={600}>
+                            {staff.first_name} {staff.last_name}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            ID: {staff.id}
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={staff.vendor_name || 'Unassigned'}
+                        size="small"
+                        variant="outlined"
+                        sx={{ fontSize: '0.75rem' }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">{staff.email}</Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {staff.phone_number}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label="Vendor Admin"
+                        size="small"
+                        color="primary"
+                        sx={{ fontSize: '0.6875rem' }}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Tooltip title="Edit">
                         <IconButton
                           component={Link}
                           to={`/dashboard/staff/${staff.id}`}
-                          color="primary"
                           size="small"
+                          sx={{ mr: 0.5 }}
                         >
-                          <EditIcon />
+                          <EditOutlinedIcon fontSize="small" />
                         </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
                         <IconButton
-                          color="error"
                           size="small"
+                          color="error"
                           onClick={() => handleDeleteClick(staff)}
                         >
-                          <DeleteIcon />
+                          <DeleteOutlineIcon fontSize="small" />
                         </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={7} align="center">
-                      No staff found
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center" sx={{ py: 6 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      {search ? 'No staff match your search' : 'No staff found'}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              mt: 2,
-            }}
-          >
-            <Typography variant="body2" color="text.secondary">
-              Showing {(page - 1) * rowsPerPage + 1} to{' '}
-              {Math.min(page * rowsPerPage, filteredData?.length || 0)} of{' '}
-              {filteredData?.length || 0} entries
-            </Typography>
-            {totalPages > 1 && (
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={(_, value) => setPage(value)}
-                color="primary"
-              />
-            )}
-          </Box>
-        </CardContent>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            px: 2,
+            py: 1.5,
+            borderTop: '1px solid',
+            borderColor: 'divider',
+          }}
+        >
+          <Typography variant="caption" color="text.secondary">
+            Showing {Math.min((page - 1) * rowsPerPage + 1, filteredData?.length || 0)} to{' '}
+            {Math.min(page * rowsPerPage, filteredData?.length || 0)} of{' '}
+            {filteredData?.length || 0} entries
+          </Typography>
+          {totalPages > 1 && (
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={(_, value) => setPage(value)}
+              color="primary"
+              size="small"
+            />
+          )}
+        </Box>
       </Card>
 
-      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle>Confirm Delete</DialogTitle>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <WarningAmberIcon color="error" />
+          Delete Staff Member
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete {staffToDelete?.first_name}{' '}
-            {staffToDelete?.last_name}? This action cannot be undone.
+            Are you sure you want to delete <strong>{staffToDelete?.first_name} {staffToDelete?.last_name}</strong>? 
+            This action cannot be undone.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={() => setDeleteDialogOpen(false)} variant="outlined">
+            Cancel
+          </Button>
           <Button
             onClick={handleDeleteConfirm}
             color="error"
             variant="contained"
             disabled={deleteStaffMutation.isPending}
           >
-            Delete
+            {deleteStaffMutation.isPending ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogActions>
       </Dialog>

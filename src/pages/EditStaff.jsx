@@ -8,15 +8,19 @@ import {
   CardContent,
   CardHeader,
   CircularProgress,
+  Divider,
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
   Select,
   Skeleton,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { useStaffById, useUpdateStaff, useVendors } from '../api/hooks';
 
 const EditStaff = () => {
@@ -76,12 +80,11 @@ const EditStaff = () => {
   if (isLoading) {
     return (
       <Box>
-        <Typography variant="h4" gutterBottom>
-          Update Vendor Admin
-        </Typography>
         <Card>
-          <CardContent>
-            <Grid container spacing={2}>
+          <CardHeader title={<Skeleton width={200} />} subheader={<Skeleton width={300} />} />
+          <Divider />
+          <CardContent sx={{ p: 3 }}>
+            <Grid container spacing={2.5}>
               {[...Array(6)].map((_, i) => (
                 <Grid item xs={12} sm={6} key={i}>
                   <Skeleton height={56} />
@@ -96,31 +99,34 @@ const EditStaff = () => {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        Update Vendor Admin
-      </Typography>
-
       <Card>
-        <CardHeader title="Edit Staff Information" />
-        <CardContent>
+        <CardHeader
+          title="Edit Staff Member"
+          subheader={`Updating: ${staff?.first_name} ${staff?.last_name}`}
+          action={
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<ArrowBackIcon />}
+              onClick={() => navigate('/dashboard/staff')}
+            >
+              Back to Staff
+            </Button>
+          }
+        />
+        <Divider />
+        <CardContent sx={{ p: 3 }}>
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
               {error}
             </Alert>
           )}
 
           <Box component="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </Grid>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
+              Personal Information
+            </Typography>
+            <Grid container spacing={2.5}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
@@ -128,6 +134,7 @@ const EditStaff = () => {
                   name="first_name"
                   value={formData.first_name}
                   onChange={handleChange}
+                  placeholder="Enter first name"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -137,6 +144,24 @@ const EditStaff = () => {
                   name="last_name"
                   value={formData.last_name}
                   onChange={handleChange}
+                  placeholder="Enter last name"
+                />
+              </Grid>
+            </Grid>
+
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 4, mb: 2 }}>
+              Contact Details
+            </Typography>
+            <Grid container spacing={2.5}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="email@example.com"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -146,16 +171,23 @@ const EditStaff = () => {
                   name="phone_number"
                   value={formData.phone_number}
                   onChange={handleChange}
+                  placeholder="+255 XXX XXX XXX"
                 />
               </Grid>
+            </Grid>
+
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 4, mb: 2 }}>
+              Account Settings
+            </Typography>
+            <Grid container spacing={2.5}>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <InputLabel>Vendor</InputLabel>
+                  <InputLabel>Assign to Vendor</InputLabel>
                   <Select
                     name="vendor_id"
                     value={formData.vendor_id}
                     onChange={handleChange}
-                    label="Vendor"
+                    label="Assign to Vendor"
                   >
                     {vendors?.map((vendor) => (
                       <MenuItem key={vendor.id} value={vendor.id}>
@@ -168,29 +200,39 @@ const EditStaff = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  label="Password"
+                  label="New Password"
                   name="password"
                   type="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Enter new password to change"
+                  placeholder="Leave blank to keep current"
+                  helperText="Only fill if changing password"
                 />
               </Grid>
             </Grid>
 
-            <Box sx={{ mt: 3 }}>
+            <Divider sx={{ my: 4 }} />
+
+            <Stack direction="row" spacing={2} justifyContent="flex-end">
+              <Button
+                variant="outlined"
+                onClick={() => navigate('/dashboard/staff')}
+              >
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 variant="contained"
                 disabled={updateStaffMutation.isPending}
+                startIcon={updateStaffMutation.isPending ? null : <SaveOutlinedIcon />}
               >
                 {updateStaffMutation.isPending ? (
-                  <CircularProgress size={24} color="inherit" />
+                  <CircularProgress size={22} color="inherit" />
                 ) : (
-                  'Update Vendor Admin'
+                  'Save Changes'
                 )}
               </Button>
-            </Box>
+            </Stack>
           </Box>
         </CardContent>
       </Card>
