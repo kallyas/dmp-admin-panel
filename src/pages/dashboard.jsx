@@ -1,320 +1,245 @@
-/* eslint-disable */
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import DPMCharts from "../components/DPMCharts";
-import Layout from "../components/Layout";
-import moment from "moment/moment";
-import { useGetVendorsQuery } from "../features/vendor/vendorSlice";
-import { useGetRoutesQuery } from "../features/routes/routesSlice";
-import { useLoggedInSessionsQuery } from "../features/login/loginSlice";
+import { useState } from 'react';
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Skeleton,
+  Pagination,
+} from '@mui/material';
+import BusinessIcon from '@mui/icons-material/Business';
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { useVendors, useRoutes, useSessions } from '../api/hooks';
+import DPMCharts from '../components/DPMCharts';
+
+dayjs.extend(relativeTime);
+
+const StatCard = ({ title, value, icon, loading }) => (
+  <Card>
+    <CardContent>
+      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+        {title} <span style={{ color: '#888' }}>| Today</span>
+      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box
+          sx={{
+            width: 48,
+            height: 48,
+            borderRadius: '50%',
+            backgroundColor: 'primary.light',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'primary.main',
+          }}
+        >
+          {icon}
+        </Box>
+        <Box>
+          {loading ? (
+            <Skeleton width={60} height={40} />
+          ) : (
+            <Typography variant="h4" fontWeight={700} color="primary">
+              {value}
+            </Typography>
+          )}
+          <Typography variant="caption" color="success.main" fontWeight={600}>
+            12% <span style={{ color: '#888' }}>increase</span>
+          </Typography>
+        </Box>
+      </Box>
+    </CardContent>
+  </Card>
+);
+
 const Dashboard = () => {
-  const dispatch = useDispatch();
-  const { data: vendors } = useGetVendorsQuery();
-  const { data: busRoutes } = useGetRoutesQuery();
-  const { data: sessions } = useLoggedInSessionsQuery();
+  const { data: vendors, isLoading: vendorsLoading } = useVendors();
+  const { data: busRoutes, isLoading: routesLoading } = useRoutes();
+  const { data: sessions, isLoading: sessionsLoading } = useSessions();
 
-  const [dataPerPage, setDataPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 5;
 
-  const handleDataPerPage = (e) => {
-    e.target.value < 10 ? setDataPerPage(10) : setDataPerPage(e.target.value);
-  };
-
-  const indexOfLastData = currentPage * dataPerPage;
-  const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentData = vendors?.slice(indexOfFirstData, indexOfLastData);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  const paginatedVendors = vendors?.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
+  const totalPages = Math.ceil((vendors?.length || 0) / rowsPerPage);
 
   return (
-    <Layout>
-      <section className="section dashboard">
-        <div className="row">
-          <div className="col-lg-8">
-            <div className="row">
-              <div className="col-xxl-4 col-md-6">
-                <div className="card info-card sales-card">
-                  <div className="filter">
-                    <a className="icon" href="#" data-bs-toggle="dropdown">
-                      <i className="bi bi-three-dots"></i>
-                    </a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Today
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Month
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Year
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Vendors <span>| Today</span>
-                    </h5>
-                    <div className="d-flex align-items-center">
-                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i className="bi bi-briefcase"></i>
-                      </div>
-                      <div className="ps-3">
-                        <h6>{vendors?.length}</h6>{" "}
-                        <span className="text-success small pt-1 fw-bold">12%</span>
-                        <span className="text-muted small pt-2 ps-1">increase</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xxl-4 col-md-6">
-                <div className="card info-card sales-card">
-                  <div className="filter">
-                    <a className="icon" href="#" data-bs-toggle="dropdown">
-                      <i className="bi bi-three-dots"></i>
-                    </a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Today
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Month
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Year
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Bus Routes <span>| Today</span>
-                    </h5>
-                    <div className="d-flex align-items-center">
-                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i className="bi bi-truck"></i>
-                      </div>
-                      <div className="ps-3">
-                        <h6>{busRoutes?.length}</h6>{" "}
-                        <span className="text-success small pt-1 fw-bold">12%</span>
-                        <span className="text-muted small pt-2 ps-1">increase</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xxl-4 col-md-12">
-                <div className="card info-card sales-card">
-                  <div className="filter">
-                    <a className="icon" href="#" data-bs-toggle="dropdown">
-                      <i className="bi bi-three-dots"></i>
-                    </a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Today
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Month
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Year
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Sales <span>| Today</span>
-                    </h5>
-                    <div className="d-flex align-items-center">
-                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i className="bi bi-cart"></i>
-                      </div>
-                      <div className="ps-3">
-                        <h6>145</h6> <span className="text-success small pt-1 fw-bold">12%</span>
-                        <span className="text-muted small pt-2 ps-1">increase</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="card">
-                  <div className="filter">
-                    <a className="icon" href="#" data-bs-toggle="dropdown">
-                      <i className="bi bi-three-dots"></i>
-                    </a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Today
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Month
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Year
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Reports <span>/Today</span>
-                    </h5>
-                    <DPMCharts />
-                  </div>
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="card top-selling overflow-auto">
-                  <div className="filter">
-                    {" "}
-                    <a className="icon" href="#" data-bs-toggle="dropdown">
-                      <i className="bi bi-three-dots"></i>
-                    </a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Today
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Month
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          This Year
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="card-body pb-0">
-                    <h5 className="card-title">
-                      Recent Vendors <span>/Today</span>
-                    </h5>
-                    <table className="table table-borderless">
-                      <thead>
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Name</th>
-                          <th scope="col">Trade Name</th>
-                          <th scope="col">Phone Number</th>
-                          <th scope="col">Email</th>
-                          <th scope="col">Address</th>
-                          <th scope="col">Postal Address</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentData?.map((e, i) => (
-                          <tr key={i}>
-                            <th scope="row">{i + 1}</th>
-                            <td>{e.name}</td>
-                            <td>{e.trade_name}</td>
-                            <td>{e.phone_number}</td>
-                            <td>{e.email}</td>
-                            <td>{e.physical_address}</td>
-                            <td>{e.postal_address}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-4">
-            <div className="card">
-              <div className="filter">
-                <a className="icon" href="#" data-bs-toggle="dropdown">
-                  <i className="bi bi-three-dots"></i>
-                </a>
-                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                  <li className="dropdown-header text-start">
-                    <h6>Filter</h6>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Today
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      This Month
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      This Year
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="card-body">
-                <h5 className="card-title">
-                  Recent Activity <span>| Today</span>
-                </h5>
-                <div className="activity">
-                  {/* map through the last 10 sessions */}
-                  {sessions
-                    ?.slice(-20)
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        Dashboard
+      </Typography>
+
+      <Grid container spacing={3}>
+        {/* Stats Cards */}
+        <Grid item xs={12} md={8}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} lg={4}>
+              <StatCard
+                title="Vendors"
+                value={vendors?.length || 0}
+                icon={<BusinessIcon />}
+                loading={vendorsLoading}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={4}>
+              <StatCard
+                title="Bus Routes"
+                value={busRoutes?.length || 0}
+                icon={<DirectionsBusIcon />}
+                loading={routesLoading}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={4}>
+              <StatCard
+                title="Sales"
+                value={145}
+                icon={<ShoppingCartIcon />}
+                loading={false}
+              />
+            </Grid>
+
+            {/* Reports Chart */}
+            <Grid item xs={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Reports <span style={{ color: '#888' }}>/Today</span>
+                  </Typography>
+                  <DPMCharts />
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Recent Vendors Table */}
+            <Grid item xs={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Recent Vendors <span style={{ color: '#888' }}>/Today</span>
+                  </Typography>
+                  <TableContainer component={Paper} elevation={0}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>#</TableCell>
+                          <TableCell>Name</TableCell>
+                          <TableCell>Trade Name</TableCell>
+                          <TableCell>Phone</TableCell>
+                          <TableCell>Email</TableCell>
+                          <TableCell>Address</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {vendorsLoading ? (
+                          [...Array(5)].map((_, i) => (
+                            <TableRow key={i}>
+                              {[...Array(6)].map((_, j) => (
+                                <TableCell key={j}>
+                                  <Skeleton />
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          ))
+                        ) : paginatedVendors?.length > 0 ? (
+                          paginatedVendors.map((vendor, i) => (
+                            <TableRow key={vendor.id || i}>
+                              <TableCell>
+                                {(page - 1) * rowsPerPage + i + 1}
+                              </TableCell>
+                              <TableCell>{vendor.name}</TableCell>
+                              <TableCell>{vendor.trade_name}</TableCell>
+                              <TableCell>{vendor.phone_number}</TableCell>
+                              <TableCell>{vendor.email}</TableCell>
+                              <TableCell>{vendor.physical_address}</TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={6} align="center">
+                              No vendors found
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  {totalPages > 1 && (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                      <Pagination
+                        count={totalPages}
+                        page={page}
+                        onChange={(_, value) => setPage(value)}
+                        color="primary"
+                      />
+                    </Box>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {/* Recent Activity */}
+        <Grid item xs={12} md={4}>
+          <Card sx={{ height: 'fit-content' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Recent Activity <span style={{ color: '#888' }}>| Today</span>
+              </Typography>
+              <Box sx={{ maxHeight: 400, overflow: 'auto' }}>
+                {sessionsLoading ? (
+                  [...Array(5)].map((_, i) => (
+                    <Box key={i} sx={{ py: 1 }}>
+                      <Skeleton />
+                    </Box>
+                  ))
+                ) : sessions?.length > 0 ? (
+                  sessions
+                    .slice(-20)
                     .reverse()
-                    .map((e, i) => (
-                      <div className="activity-item d-flex mx-4" key={i}>
-                        <div className="activity-content">
-                          {/* format time like 2 hours ago etc */}
-                          {e?.first_name + " " + e?.last_name} logged in{" "}
-                          {moment(e?.logged_in_at).fromNow()} at{" "}
-                          {moment(e?.logged_in_at).format("h:mm a")}
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </Layout>
+                    .map((session, i) => (
+                      <Box
+                        key={i}
+                        sx={{
+                          py: 1,
+                          borderBottom: '1px solid #eee',
+                          '&:last-child': { borderBottom: 'none' },
+                        }}
+                      >
+                        <Typography variant="body2">
+                          <strong>
+                            {session.first_name} {session.last_name}
+                          </strong>{' '}
+                          logged in {dayjs(session.logged_in_at).fromNow()} at{' '}
+                          {dayjs(session.logged_in_at).format('h:mm a')}
+                        </Typography>
+                      </Box>
+                    ))
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    No recent activity
+                  </Typography>
+                )}
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
