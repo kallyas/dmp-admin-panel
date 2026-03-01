@@ -1,74 +1,103 @@
-/* eslint-disable */
-import { IconPlus } from "@tabler/icons";
-import React from "react";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  AppBar,
+  Avatar,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+  Divider,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+import HelpIcon from '@mui/icons-material/Help';
+import LogoutIcon from '@mui/icons-material/Logout';
 
-const Navbar = () => {
+const Navbar = ({ drawerWidth, onMenuClick }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <header className="header fixed-top d-flex align-items-center">
-      <div className="d-flex align-items-center justify-content-between">
-        <a href="/dashboard" className="logo d-flex align-items-center">
-          <img src="roadslinks_logo.png" alt="" />
-          <span className="d-none d-lg-block">DPM Ltd</span>
-        </a>
-        <i className="bi bi-list toggle-sidebar-btn"></i>
-      </div>
-      <nav className="header-nav ms-auto">
-        <ul className="d-flex align-items-center">
-          <li className="nav-item d-block d-lg-none">
-            <a className="nav-link nav-icon search-bar-toggle " href="#">
-              <i className="bi bi-search"></i>
-            </a>
-          </li>
-          <li className="nav-item dropdown pe-3">
-            <a
-              className="nav-link nav-profile d-flex align-items-center pe-0"
-              href="#"
-              data-bs-toggle="dropdown"
-            >
-              <img src="/roadslinks_logo.png" alt="Profile" className="rounded-circle" />{" "}
-              <span className="d-none d-md-block dropdown-toggle ps-2">Roads Links</span>{" "}
-            </a>
-            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-              <li className="dropdown-header">
-                <h6>Roads Links</h6> <span>Web Designer</span>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <a className="dropdown-item d-flex align-items-center" href="#">
-                  <i className="bi bi-person"></i> <span>My Profile</span>
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <a className="dropdown-item d-flex align-items-center" href="#">
-                  <i className="bi bi-gear"></i> <span>Account Settings</span>
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <a className="dropdown-item d-flex align-items-center" href="#">
-                  <i className="bi bi-question-circle"></i> <span>Need Help?</span>
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <a className="dropdown-item d-flex align-items-center" href="#">
-                  <i className="bi bi-box-arrow-right"></i> <span>Sign Out</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <AppBar
+      position="fixed"
+      sx={{
+        width: { sm: `calc(100% - ${drawerWidth}px)` },
+        ml: { sm: `${drawerWidth}px` },
+      }}
+    >
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={onMenuClick}
+          sx={{ mr: 2, display: { sm: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          Admin Panel
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography variant="body2" sx={{ display: { xs: 'none', md: 'block' } }}>
+            Roads Links
+          </Typography>
+          <IconButton onClick={handleClick} size="small">
+            <Avatar
+              src="/roadslinks_logo.png"
+              alt="Profile"
+              sx={{ width: 32, height: 32 }}
+            />
+          </IconButton>
+        </Box>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        >
+          <Box sx={{ px: 2, py: 1 }}>
+            <Typography variant="subtitle1" fontWeight={600}>
+              Roads Links
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Administrator
+            </Typography>
+          </Box>
+          <Divider />
+          <MenuItem onClick={handleClose}>
+            <PersonIcon sx={{ mr: 1 }} fontSize="small" />
+            My Profile
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <SettingsIcon sx={{ mr: 1 }} fontSize="small" />
+            Account Settings
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <HelpIcon sx={{ mr: 1 }} fontSize="small" />
+            Need Help?
+          </MenuItem>
+          <Divider />
+          <MenuItem component={Link} to="/dashboard/logout" onClick={handleClose}>
+            <LogoutIcon sx={{ mr: 1 }} fontSize="small" />
+            Sign Out
+          </MenuItem>
+        </Menu>
+      </Toolbar>
+    </AppBar>
   );
 };
 

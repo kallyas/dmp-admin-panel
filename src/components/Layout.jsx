@@ -1,42 +1,54 @@
-/* eslint-disable */
-import Sidebar from "./Sidebar";
-import Navbar from "./Navbar";
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { Box, Toolbar } from '@mui/material';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
+
+const DRAWER_WIDTH = 280;
 
 const Layout = ({ children }) => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   return (
-    <>
-      <Navbar />
-      <Sidebar />
-      <main id="main" className="main">
-        <div className="pagetitle">
-          <h1>Dashboard</h1>
-          <nav>
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="/dashboard">Home</a>
-              </li>
-              <li className="breadcrumb-item active">Dashboard</li>
-            </ol>
-          </nav>
-        </div>
-        {children}
-      </main>
-      <footer id="footer" className="footer">
-        <div className="copyright">
-          © Copyright {new Date().getFullYear()}
-          <strong>
-            <span> Roads Links</span>
-          </strong>
-          . All Rights Reserved
-        </div>
-        <div className="credits">
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      <Navbar drawerWidth={DRAWER_WIDTH} onMenuClick={handleDrawerToggle} />
+      <Sidebar
+        drawerWidth={DRAWER_WIDTH}
+        mobileOpen={mobileOpen}
+        onClose={handleDrawerToggle}
+      />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
+          backgroundColor: 'background.default',
+          minHeight: '100vh',
+        }}
+      >
+        <Toolbar />
+        {children || <Outlet />}
+        <Box
+          component="footer"
+          sx={{
+            mt: 'auto',
+            py: 3,
+            textAlign: 'center',
+            color: 'text.secondary',
+            fontSize: '0.875rem',
+          }}
+        >
+          © Copyright {new Date().getFullYear()} <strong>Roads Links</strong>. All Rights Reserved
+          <br />
           Designed by <a href="https://github.com/kallyas/">Iden</a>
-        </div>
-      </footer>
-      <a href="#" className="back-to-top d-flex align-items-center justify-content-center active">
-        <i className="bi bi-arrow-up-short"></i>
-      </a>
-    </>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
