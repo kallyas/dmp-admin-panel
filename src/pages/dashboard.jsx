@@ -1,64 +1,89 @@
 import { useState } from 'react';
 import {
+  Avatar,
   Box,
   Card,
   CardContent,
+  CardHeader,
+  Chip,
   Grid,
-  Typography,
+  IconButton,
+  LinearProgress,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
+  Typography,
   Skeleton,
   Pagination,
+  alpha,
 } from '@mui/material';
-import BusinessIcon from '@mui/icons-material/Business';
-import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
+import DirectionsBusOutlinedIcon from '@mui/icons-material/DirectionsBusOutlined';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useVendors, useRoutes, useSessions } from '../api/hooks';
+import { useVendors, useRoutes, useSessions, useStaff } from '../api/hooks';
 import DPMCharts from '../components/DPMCharts';
 
 dayjs.extend(relativeTime);
 
-const StatCard = ({ title, value, icon, loading }) => (
+const StatCard = ({ title, value, change, changeType, icon, color, loading }) => (
   <Card>
-    <CardContent>
-      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-        {title} <span style={{ color: '#888' }}>| Today</span>
-      </Typography>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+    <CardContent sx={{ p: 2.5 }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary" fontWeight={500}>
+            {title}
+          </Typography>
+          {loading ? (
+            <Skeleton width={80} height={36} sx={{ mt: 0.5 }} />
+          ) : (
+            <Typography variant="h4" fontWeight={700} sx={{ mt: 0.5 }}>
+              {value}
+            </Typography>
+          )}
+          <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mt: 1 }}>
+            {changeType === 'up' ? (
+              <TrendingUpIcon sx={{ fontSize: 16, color: 'success.main' }} />
+            ) : (
+              <TrendingDownIcon sx={{ fontSize: 16, color: 'error.main' }} />
+            )}
+            <Typography
+              variant="caption"
+              fontWeight={600}
+              color={changeType === 'up' ? 'success.main' : 'error.main'}
+            >
+              {change}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              vs last month
+            </Typography>
+          </Stack>
+        </Box>
         <Box
           sx={{
             width: 48,
             height: 48,
-            borderRadius: '50%',
-            backgroundColor: 'primary.light',
+            borderRadius: 2,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'primary.main',
+            bgcolor: alpha(color, 0.1),
+            color: color,
           }}
         >
           {icon}
         </Box>
-        <Box>
-          {loading ? (
-            <Skeleton width={60} height={40} />
-          ) : (
-            <Typography variant="h4" fontWeight={700} color="primary">
-              {value}
-            </Typography>
-          )}
-          <Typography variant="caption" color="success.main" fontWeight={600}>
-            12% <span style={{ color: '#888' }}>increase</span>
-          </Typography>
-        </Box>
-      </Box>
+      </Stack>
     </CardContent>
   </Card>
 );
@@ -67,6 +92,7 @@ const Dashboard = () => {
   const { data: vendors, isLoading: vendorsLoading } = useVendors();
   const { data: busRoutes, isLoading: routesLoading } = useRoutes();
   const { data: sessions, isLoading: sessionsLoading } = useSessions();
+  const { data: staff, isLoading: staffLoading } = useStaff();
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
@@ -79,163 +105,244 @@ const Dashboard = () => {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        Dashboard
-      </Typography>
+      {/* Stats Grid */}
+      <Grid container spacing={2.5} sx={{ mb: 3 }}>
+        <Grid item xs={12} sm={6} lg={3}>
+          <StatCard
+            title="Total Vendors"
+            value={vendors?.length || 0}
+            change="+12%"
+            changeType="up"
+            icon={<BusinessOutlinedIcon />}
+            color="#0891b2"
+            loading={vendorsLoading}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} lg={3}>
+          <StatCard
+            title="Bus Routes"
+            value={busRoutes?.length || 0}
+            change="+8%"
+            changeType="up"
+            icon={<DirectionsBusOutlinedIcon />}
+            color="#0d9488"
+            loading={routesLoading}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} lg={3}>
+          <StatCard
+            title="Total Staff"
+            value={staff?.length || 0}
+            change="+5%"
+            changeType="up"
+            icon={<PeopleOutlinedIcon />}
+            color="#8b5cf6"
+            loading={staffLoading}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} lg={3}>
+          <StatCard
+            title="Total Trips"
+            value={1248}
+            change="-3%"
+            changeType="down"
+            icon={<ReceiptLongOutlinedIcon />}
+            color="#f59e0b"
+            loading={false}
+          />
+        </Grid>
+      </Grid>
 
-      <Grid container spacing={3}>
-        {/* Stats Cards */}
-        <Grid item xs={12} md={8}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} lg={4}>
-              <StatCard
-                title="Vendors"
-                value={vendors?.length || 0}
-                icon={<BusinessIcon />}
-                loading={vendorsLoading}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={4}>
-              <StatCard
-                title="Bus Routes"
-                value={busRoutes?.length || 0}
-                icon={<DirectionsBusIcon />}
-                loading={routesLoading}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={4}>
-              <StatCard
-                title="Sales"
-                value={145}
-                icon={<ShoppingCartIcon />}
-                loading={false}
-              />
-            </Grid>
-
-            {/* Reports Chart */}
-            <Grid item xs={12}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    Reports <span style={{ color: '#888' }}>/Today</span>
-                  </Typography>
-                  <DPMCharts />
-                </CardContent>
-              </Card>
-            </Grid>
-
-            {/* Recent Vendors Table */}
-            <Grid item xs={12}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    Recent Vendors <span style={{ color: '#888' }}>/Today</span>
-                  </Typography>
-                  <TableContainer component={Paper} elevation={0}>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>#</TableCell>
-                          <TableCell>Name</TableCell>
-                          <TableCell>Trade Name</TableCell>
-                          <TableCell>Phone</TableCell>
-                          <TableCell>Email</TableCell>
-                          <TableCell>Address</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {vendorsLoading ? (
-                          [...Array(5)].map((_, i) => (
-                            <TableRow key={i}>
-                              {[...Array(6)].map((_, j) => (
-                                <TableCell key={j}>
-                                  <Skeleton />
-                                </TableCell>
-                              ))}
-                            </TableRow>
-                          ))
-                        ) : paginatedVendors?.length > 0 ? (
-                          paginatedVendors.map((vendor, i) => (
-                            <TableRow key={vendor.id || i}>
-                              <TableCell>
-                                {(page - 1) * rowsPerPage + i + 1}
-                              </TableCell>
-                              <TableCell>{vendor.name}</TableCell>
-                              <TableCell>{vendor.trade_name}</TableCell>
-                              <TableCell>{vendor.phone_number}</TableCell>
-                              <TableCell>{vendor.email}</TableCell>
-                              <TableCell>{vendor.physical_address}</TableCell>
-                            </TableRow>
-                          ))
-                        ) : (
-                          <TableRow>
-                            <TableCell colSpan={6} align="center">
-                              No vendors found
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                  {totalPages > 1 && (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                      <Pagination
-                        count={totalPages}
-                        page={page}
-                        onChange={(_, value) => setPage(value)}
-                        color="primary"
-                      />
-                    </Box>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+      <Grid container spacing={2.5}>
+        {/* Chart */}
+        <Grid item xs={12} lg={8}>
+          <Card>
+            <CardHeader
+              title="Revenue Overview"
+              subheader="Monthly performance metrics"
+              action={
+                <IconButton size="small">
+                  <MoreVertIcon fontSize="small" />
+                </IconButton>
+              }
+            />
+            <CardContent sx={{ pt: 0 }}>
+              <DPMCharts />
+            </CardContent>
+          </Card>
         </Grid>
 
         {/* Recent Activity */}
-        <Grid item xs={12} md={4}>
-          <Card sx={{ height: 'fit-content' }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Recent Activity <span style={{ color: '#888' }}>| Today</span>
-              </Typography>
-              <Box sx={{ maxHeight: 400, overflow: 'auto' }}>
+        <Grid item xs={12} lg={4}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Recent Activity"
+              subheader="Latest login sessions"
+              action={
+                <Chip label="Live" size="small" color="success" variant="outlined" />
+              }
+            />
+            <CardContent sx={{ pt: 0, maxHeight: 340, overflow: 'auto' }}>
+              <Stack spacing={2}>
                 {sessionsLoading ? (
                   [...Array(5)].map((_, i) => (
-                    <Box key={i} sx={{ py: 1 }}>
-                      <Skeleton />
-                    </Box>
+                    <Stack key={i} direction="row" spacing={2} alignItems="center">
+                      <Skeleton variant="circular" width={36} height={36} />
+                      <Box sx={{ flex: 1 }}>
+                        <Skeleton width="60%" height={20} />
+                        <Skeleton width="40%" height={16} />
+                      </Box>
+                    </Stack>
                   ))
                 ) : sessions?.length > 0 ? (
                   sessions
-                    .slice(-20)
+                    .slice(-10)
                     .reverse()
                     .map((session, i) => (
-                      <Box
-                        key={i}
-                        sx={{
-                          py: 1,
-                          borderBottom: '1px solid #eee',
-                          '&:last-child': { borderBottom: 'none' },
-                        }}
-                      >
-                        <Typography variant="body2">
-                          <strong>
+                      <Stack key={i} direction="row" spacing={1.5} alignItems="center">
+                        <Avatar
+                          sx={{
+                            width: 36,
+                            height: 36,
+                            bgcolor: 'primary.main',
+                            fontSize: '0.8125rem',
+                          }}
+                        >
+                          {session.first_name?.[0]}
+                          {session.last_name?.[0]}
+                        </Avatar>
+                        <Box sx={{ flex: 1, minWidth: 0 }}>
+                          <Typography variant="body2" fontWeight={600} noWrap>
                             {session.first_name} {session.last_name}
-                          </strong>{' '}
-                          logged in {dayjs(session.logged_in_at).fromNow()} at{' '}
-                          {dayjs(session.logged_in_at).format('h:mm a')}
-                        </Typography>
-                      </Box>
+                          </Typography>
+                          <Stack direction="row" alignItems="center" spacing={0.5}>
+                            <AccessTimeIcon sx={{ fontSize: 12, color: 'text.secondary' }} />
+                            <Typography variant="caption" color="text.secondary">
+                              {dayjs(session.logged_in_at).fromNow()}
+                            </Typography>
+                          </Stack>
+                        </Box>
+                        <Chip
+                          label="Login"
+                          size="small"
+                          sx={{ fontSize: '0.6875rem', height: 20 }}
+                        />
+                      </Stack>
                     ))
                 ) : (
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" textAlign="center">
                     No recent activity
                   </Typography>
                 )}
-              </Box>
+              </Stack>
             </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Recent Vendors Table */}
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader
+              title="Recent Vendors"
+              subheader={`${vendors?.length || 0} total vendors`}
+              action={
+                <IconButton size="small">
+                  <MoreVertIcon fontSize="small" />
+                </IconButton>
+              }
+            />
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Vendor</TableCell>
+                    <TableCell>Trade Name</TableCell>
+                    <TableCell>Contact</TableCell>
+                    <TableCell>Address</TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {vendorsLoading ? (
+                    [...Array(5)].map((_, i) => (
+                      <TableRow key={i}>
+                        {[...Array(5)].map((_, j) => (
+                          <TableCell key={j}>
+                            <Skeleton />
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : paginatedVendors?.length > 0 ? (
+                    paginatedVendors.map((vendor, i) => (
+                      <TableRow key={vendor.id || i} hover>
+                        <TableCell>
+                          <Stack direction="row" alignItems="center" spacing={1.5}>
+                            <Avatar
+                              sx={{
+                                width: 32,
+                                height: 32,
+                                bgcolor: 'grey.200',
+                                color: 'text.primary',
+                                fontSize: '0.75rem',
+                              }}
+                            >
+                              {vendor.name?.[0]}
+                            </Avatar>
+                            <Box>
+                              <Typography variant="body2" fontWeight={600}>
+                                {vendor.name}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                {vendor.email}
+                              </Typography>
+                            </Box>
+                          </Stack>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">{vendor.trade_name}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">{vendor.phone_number}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2" noWrap sx={{ maxWidth: 200 }}>
+                            {vendor.physical_address}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label="Active"
+                            size="small"
+                            color="success"
+                            sx={{ fontSize: '0.6875rem' }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} align="center" sx={{ py: 4 }}>
+                        <Typography variant="body2" color="text.secondary">
+                          No vendors found
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {totalPages > 1 && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={(_, value) => setPage(value)}
+                  color="primary"
+                  size="small"
+                />
+              </Box>
+            )}
           </Card>
         </Grid>
       </Grid>

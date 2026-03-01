@@ -5,7 +5,7 @@ import apiClient from './client';
 export const useLogin = () => {
   return useMutation({
     mutationFn: async (credentials) => {
-      const response = await apiClient.post('/login', credentials);
+      const response = await apiClient.post('/admin/login', credentials);
       return response.data;
     },
   });
